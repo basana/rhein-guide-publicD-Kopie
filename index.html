@@ -741,8 +741,8 @@ const castles = [
     destroyed: "—", destroyedRu: "—",
     facts: "Benedictine abbey overlooking the Rhine. Hildegard von Bingen lived here as a visionary mystic, composer, and physician.",
     factsRu: "Бенедиктинское аббатство над Рейном. Хильдегарда Бингенская жила здесь как мистик, композитор и врач.",
-    legend: "Recognized globally as a Doctor of the Church for her profound theological and medical insights.",
-    legendRu: "Признана Учителем Церкви за глубокие богословские и медицинские труды.",
+    legend: "People called her the 'Sibyl of the Rhine,' because of her visions — she said she had seen things since she was a small child. When she died in 1179, her sisters said they saw two rays of light cross the sky above her room. In 2012, the Pope named her a Doctor of the Church — a title given to only a few women in history.",
+    legendRu: "Её называли «Сивиллой Рейна» из-за её видений — она говорила, что видела их с самого детства. Когда она умерла в 1179 году, монахини рассказывали, что видели два луча света, пересёкшихся в небе над её комнатой. В 2012 году папа римский объявил её Учителем Церкви — титул, который в истории получили лишь несколько женщин.",
     say: "A peaceful spiritual sanctuary founded by the brilliant medieval polymath.",
     sayRu: "Мирная духовная обитель, основанная выдающейся средневековой мыслительницей."
   }
@@ -752,52 +752,198 @@ const routePlaces = [
   {
     title: "Koblenz — where two rivers meet", titleRu: "Кобленц — слияние двух рек",
     place: "Koblenz / Deutsches Eck",
-    text: "The journey begins at the confluence of the Rhine and Moselle, starting from the rich history of Koblenz old town and Ehrenbreitstein fortress.",
-    textRu: "Путешествие начинается у слияния Рейна и Мозеля, стартуя с истории старого города Кобленца и крепости Эренбрайтштайн.",
-    extra: "An exceptional hub of history, culture, and guided tours in Rhineland-Palatinate.",
-    extraRu: "Важнейший центр истории, культуры и экскурсий в Рейнланд-Пфальце.",
-    hook: "Two rivers, grand fortresses and the gateway to the gorge.",
-    hookRu: "Две реки, грандиозные крепости и врата в ущелье."
+    text: "The journey begins at the confluence of the Rhine and Moselle. The name Koblenz goes back to the Roman name Castellum apud Confluentes — the settlement at the confluence. The Deutsches Eck itself takes its name from the Teutonic Order, which established a settlement here in 1216.",
+    textRu: "Путешествие начинается у слияния Рейна и Мозеля. Название Кобленц восходит к римскому «Castellum apud Confluentes» — поселению у слияния рек. Само Дойчес-Экк получило имя от Тевтонского ордена, основавшего здесь поселение в 1216 году.",
+    extra: "The present peninsula was shaped in part by the filling of a harbor at the Moselle mouth. The monument to Kaiser Wilhelm I was inaugurated in 1897, destroyed in 1945, and reconstructed in 1993.",
+    extraRu: "Нынешний мыс частично сформировался благодаря засыпке гавани в устье Мозеля. Памятник кайзеру Вильгельму I открыли в 1897 году, разрушили в 1945-м и восстановили в 1993-м.",
+    hook: "Two rivers, one strategic point — and the perfect place to explain why this valley became so important.",
+    hookRu: "Две реки, одна стратегическая точка — идеальное место, чтобы объяснить, почему эта долина стала настолько важной."
   },
   {
-    title: "Stolzenfels — Rhine Romanticism", titleRu: "Штольценфелс — рейнский романтизм",
+    title: "Stolzenfels — the Rhine Romanticism begins", titleRu: "Штольценфелс — здесь начинается рейнский романтизм",
     place: "Koblenz",
-    text: "A medieval ruin transformed into a 19th-century royal vision of the Middle Ages by Prussian Crown Prince Friedrich Wilhelm.",
-    textRu: "Средневековая руина, превращенная прусским кронпринцем Фридрихом Вильгельмом в королевское видение Средневековья.",
-    extra: "What looks medieval from the river is partly a 19th-century work of art.",
-    extraRu: "То, что с реки выглядит средневековым, отчасти является произведением искусства XIX века.",
-    hook: "A 19th-century fairy-tale fantasy built on medieval foundations.",
-    hookRu: "Сказочная фантазия XIX века на средневековом фундаменте."
+    text: "Stolzenfels is a good first example of the great Rhine transformation: a medieval castle ruin became a 19th-century royal vision of the Middle Ages. Prussian Crown Prince Friedrich Wilhelm bought the ruin and had it rebuilt in the Romantic style.",
+    textRu: "Штольценфелс — хороший первый пример великого рейнского превращения: средневековая руина стала королевским видением Средневековья XIX века. Прусский кронпринц Фридрих Вильгельм купил руину и восстановил её в романтическом стиле.",
+    extra: "What looks medieval from the river is therefore partly a 19th-century work of art — exactly the kind of reconstruction that helped create the Rhine landscape tourists recognize today.",
+    extraRu: "То, что с реки выглядит средневековым, отчасти является произведением искусства XIX века — именно такая реконструкция и создала тот рейнский пейзаж, который туристы узнают сегодня.",
+    hook: "It looks like a medieval castle. But much of the castle tourists see is a 19th-century fantasy of the Middle Ages.",
+    hookRu: "Выглядит как средневековый замок. Но большая часть того, что видят туристы, — фантазия XIX века о Средневековье."
   },
   {
-    title: "Boppard and the Great Loop", titleRu: "Боппард и Великая Излучина",
+    title: "Lahnstein — where the Lahn joins the Rhine", titleRu: "Ланштайн — где Лан впадает в Рейн",
+    place: "Lahnstein / Lahneck",
+    text: "Lahneck stands above the mouth of the Lahn, opposite Stolzenfels. The location explains the castle's importance: the junction of two waterways was an ideal place to control movement and river traffic.",
+    textRu: "Лянек стоит над устьем реки Лан, напротив Штольценфельса. Расположение объясняет важность замка: место слияния двух рек было идеальным для контроля над движением и речным трафиком.",
+    extra: "Local tradition also connects Lahneck with fleeing Knights Templar, although that story is not historically confirmed. It works best as a clearly labelled legend rather than as established history.",
+    extraRu: "Местная традиция также связывает Лянек с бежавшими рыцарями-тамплиерами, хотя эта история исторически не подтверждена. Лучше преподносить её именно как легенду, а не как установленный факт.",
+    hook: "Here the geography itself explains the castle: two rivers meet, and whoever controlled the height could watch the traffic.",
+    hookRu: "Здесь сама география объясняет замок: две реки встречаются, и тот, кто контролировал высоту, следил за движением."
+  },
+  {
+    title: "The Lahn's hidden treasure — marble from a tropical sea",
+    titleRu: "Скрытое сокровище реки Лан — мрамор из тропического моря",
+    place: "Villmar, on the river Lahn",
+    text: "A little further up the river Lahn, the small town of Villmar sits on something special: colorful 'Lahn Marble.' It isn't true marble — it's a polishable limestone. It formed about 380 million years ago from coral reefs in a warm, shallow sea that once covered this part of Germany.",
+    textRu: "Чуть выше по реке Лан стоит маленький городок Фильмар, а под ним — кое-что особенное: цветной «ланский мрамор». На самом деле это не настоящий мрамор, а известняк, который хорошо полируется. Он образовался около 380 миллионов лет назад из коралловых рифов в тёплом мелком море, которое когда-то покрывало эту часть Германии.",
+    extra: "Because it shines so beautifully when polished, this stone traveled far from the Lahn valley. It was used in churches and palaces across Germany, and even further: in the entrance hall of the Empire State Building in New York, and in the Hermitage in St. Petersburg.",
+    extraRu: "Этот камень так красиво блестит после полировки, что уехал далеко за пределы долины Лана. Его использовали в церквях и дворцах по всей Германии, и даже дальше: в вестибюле Эмпайр-стейт-билдинг в Нью-Йорке и в Эрмитаже в Санкт-Петербурге.",
+    hook: "A small town on a small river — and a piece of it is standing in the lobby of one of the world's most famous skyscrapers.",
+    hookRu: "Маленький город на маленькой реке — а кусочек его стоит в вестибюле одного из самых знаменитых небоскрёбов мира."
+  },
+  {
+    title: "Braubach — a medieval town under Marksburg", titleRu: "Браубах — средневековый город под Марксбургом",
+    place: "Braubach",
+    text: "Braubach is one of the small Rhine towns that makes the valley feel medieval rather than simply scenic. Above it stands Marksburg, the remarkable survivor that was never destroyed in the great wave of warfare that ruined so many other Rhine castles.",
+    textRu: "Браубах — один из маленьких рейнских городков, из-за которых долина ощущается не просто живописной, а именно средневековой. Над ним стоит Марксбург — удивительный уцелевший замок, который ни разу не разрушили за все войны, погубившие столько других рейнских замков.",
+    extra: "Marksburg is therefore especially useful for comparison: it gives visitors a physical idea of what many other Rhine castles might have looked like before later destruction and Romantic reconstruction.",
+    extraRu: "Поэтому Марксбург особенно полезен для сравнения: он даёт посетителям наглядное представление о том, как могли выглядеть другие рейнские замки до разрушения и романтической реконструкции.",
+    hook: "One town, one genuine medieval castle above it — and a perfect contrast with the reconstructed ruins further down the Rhine.",
+    hookRu: "Один город, один настоящий средневековый замок над ним — и прекрасный контраст с восстановленными руинами дальше по Рейну."
+  },
+  {
+    title: "Boppard — Rome is still under the town", titleRu: "Боппард — Рим до сих пор под городом",
     place: "Boppard",
-    text: "Home to the Bopparder Hamm, showcasing the most sweeping river bend and steep terraced vineyards.",
-    textRu: "Здесь находится Боппардский амфитеатр — самый живописный речной изгиб и крутые террасные виноградники.",
-    extra: "A perfect stop for wine tasting, Roman heritage, and chairlift viewpoints.",
-    extraRu: "Идеальная остановка для дегустации вина и панорамных видов.",
-    hook: "Where the Rhine bends gracefully around ancient slopes.",
-    hookRu: "Где Рейн изящно огибает древние склоны."
+    text: "Boppard was an important Roman settlement. A late Roman fortress was built here in the 4th century; its substantial walls and towers shaped the later town. The ancient settlement was known as Baudobriga or Bodobrica.",
+    textRu: "Боппард был важным римским поселением. Позднеримская крепость была построена здесь в IV веке; её мощные стены и башни сформировали облик позднейшего города. Древнее поселение называлось Baudobriga или Bodobrica.",
+    extra: "Boppard also has a long wine tradition. Roman soldiers received wine as part of their provisions, and the town's viticulture is documented in the Middle Ages. The Bopparder Hamm is today the largest contiguous vineyard area on the Middle Rhine.",
+    extraRu: "У Боппарда также долгая винодельческая традиция. Римские солдаты получали вино как часть довольствия, а виноградарство города документально известно уже в Средние века. Боппардская излучина сегодня — самый большой сплошной виноградник Среднего Рейна.",
+    hook: "When you look at Boppard, you are not only looking at a medieval Rhine town — you are looking at a town whose shape still remembers Rome.",
+    hookRu: "Глядя на Боппард, вы видите не просто средневековый рейнский город — вы видите город, чья форма до сих пор помнит Рим."
   },
   {
-    title: "Loreley — a rock, a legend and a stage", titleRu: "Лорелей — скала, легенда и сцена",
+    title: "St. Goar — the fortress that refused to fall", titleRu: "Санкт-Гоар — крепость, которая отказывалась падать",
+    place: "St. Goar / Rheinfels",
+    text: "Rheinfels began as a toll castle and grew into the largest fortress complex on the Middle Rhine. Its military history is unusually dramatic: it survived a long siege in the 13th century and later resisted a huge French attack in the age of Louis XIV.",
+    textRu: "Рейнфельс начинался как таможенный замок и вырос в крупнейший крепостной комплекс Среднего Рейна. Его военная история необычно драматична: он пережил долгую осаду в XIII веке и позже выдержал масштабную французскую атаку в эпоху Людовика XIV.",
+    extra: "The final irony is that Rheinfels was not taken by a spectacular assault in 1794. It was abandoned as French forces advanced and was subsequently dismantled.",
+    extraRu: "Финальная ирония в том, что Рейнфельс не пал в результате эффектного штурма в 1794 году. Его просто оставили при наступлении французских войск, а затем разобрали.",
+    hook: "The fortress survived armies — and in the end it was politics and retreat, not a victorious assault, that ended its military life.",
+    hookRu: "Крепость пережила армии — а её военную жизнь в итоге закончили политика и отступление, а не победный штурм."
+  },
+  {
+    title: "St. Goarshausen — the Cat and the Mouse", titleRu: "Санкт-Гоарсхаузен — Кот и Мышь",
+    place: "St. Goarshausen / Katz & Maus",
+    text: "Across the river, Burg Katz and Burg Maus tell a very Rhine-like story: castles were tools of competing powers trying to control tolls and river traffic. 'Maus' was originally known by other names; 'Maus' became a mocking nickname.",
+    textRu: "На другом берегу Бург-Кац и Бург-Маус рассказывают очень рейнскую историю: замки были инструментами соперничающих держав, боровшихся за контроль над пошлинами и речным движением. «Маус» изначально назывался иначе; «Маус» стало насмешливым прозвищем.",
+    extra: "The popular Cat-and-Mouse story reflects a real political rivalry, which is why the names are more than a tourist joke.",
+    extraRu: "Популярная история про Кота и Мышь отражает реальное политическое соперничество, поэтому названия — больше, чем туристическая шутка.",
+    hook: "The Rhine once had a real Cat-and-Mouse game — and it was played with castles and toll money.",
+    hookRu: "На Рейне когда-то шла настоящая игра в Кота и Мышь — и играли в неё замками и таможенными деньгами."
+  },
+  {
+    title: "Loreley — a name, a rock, and a stage on top",
+    titleRu: "Лорелей — имя, скала и концертная площадка наверху",
     place: "Loreley / St. Goarshausen",
-    text: "The 132-meter slate cliff sits at the narrowest point of the Rhine, inspiring Heinrich Heine's immortal poem.",
-    textRu: "Сланцевая скала высотой 132 метра в узком месте Рейна, вдохновившая бессмертную поэму Генриха Гейне.",
-    extra: "Strong currents and echoes created legends of the golden-haired siren.",
-    extraRu: "Сильное течение и эхо породили легенды о златокудрой сирене.",
-    hook: "A 200-year-old poem that became an immortal river legend.",
-    hookRu: "Поэма двухсотлетней давности, ставшая бессмертной речной легендой."
+    text: "The rock is 132 meters high. It sits at the narrowest, once most dangerous bend of the whole Rhine. Old currents and a small waterfall made a murmuring sound here. That is probably where the name comes from: 'lureln' means 'to murmur,' and 'ley' means 'rock.' So Loreley likely means 'murmuring rock.' Another old theory links it to 'lauern' — 'to lurk' — so some call it the 'lurking rock' instead.",
+    textRu: "Скала высотой 132 метра. Она стоит на самом узком, когда-то самом опасном повороте всего Рейна. Старое течение и небольшой водопад издавали здесь глухой гул. Отсюда, вероятно, и название: «lureln» значит «бормотать», а «ley» — «скала». Так что «Лорелей», скорее всего, значит «бормочущая скала». Есть и другая версия — от слова «lauern», «подстерегать» — тогда это «скала-ловушка».",
+    extra: "Over the centuries, people have spelled her name many ways: Loreley, Lorelei, Lore Lay, Lore-Ley, Lurley, Lurlei. Today, a big open-air concert stage sits right on top of the rock — bands and orchestras still perform there. And two towns on opposite banks, St. Goar and St. Goarshausen, both like to say the legend really belongs to them.",
+    extraRu: "За века её имя писали по-разному: Loreley, Lorelei, Lore Lay, Lore-Ley, Lurley, Lurlei. Сегодня прямо на вершине скалы стоит большая концертная площадка под открытым небом — там до сих пор выступают группы и оркестры. А два города на разных берегах, Санкт-Гоар и Санкт-Гоарсхаузен, любят говорить, что легенда на самом деле родом именно у них.",
+    hook: "One rock, one murmur, a dozen spellings — and a concert stage where the siren used to sing.",
+    hookRu: "Одна скала, один гул воды, десяток вариантов написания имени — и концертная сцена там, где когда-то пела сирена."
   },
   {
-    title: "Bacharach and Rüdesheim", titleRu: "Бахарах и Рюдесхайм",
-    place: "Southern Gorge",
-    text: "Historic wine towns featuring half-timbered architecture, ancient ramparts, and vibrant wine taverns.",
-    textRu: "Исторические винные города с фахверковой архитектурой, древними стенами и уютными тавернами.",
-    extra: "The vibrant southern bookends of the Middle Rhine UNESCO heritage route.",
-    extraRu: "Яркие южные ворота маршрута Всемирного наследия ЮНЕСКО.",
-    hook: "Timeless wine culture preserved along the riverbanks.",
-    hookRu: "Вечная винная культура, сохраненная на берегах реки."
+    title: "Oberwesel — towers, vineyards and the Romantic Rhine", titleRu: "Обервезель — башни, виноградники и романтический Рейн",
+    place: "Oberwesel",
+    text: "Oberwesel is one of the places where the valley's medieval character is especially visible: walls, towers, vineyards and the steep slopes all survive together. It is a good moment to explain that UNESCO protects the entire cultural landscape, not a single castle.",
+    textRu: "Обервезель — одно из мест, где средневековый характер долины особенно заметен: стены, башни, виноградники и крутые склоны сохранились все вместе. Хороший момент объяснить, что ЮНЕСКО охраняет весь культурный ландшафт целиком, а не отдельный замок.",
+    extra: "The town also belongs to the literary and Romantic story of the Rhine, when writers, painters and travellers turned the valley into one of Europe's most celebrated landscapes.",
+    extraRu: "Город также принадлежит литературной и романтической истории Рейна — временам, когда писатели, художники и путешественники превратили долину в один из самых прославленных пейзажей Европы.",
+    hook: "Here the castle is only one piece of the picture — the town, walls, vineyards and river together are the heritage.",
+    hookRu: "Здесь замок — лишь часть картины: наследие — это город, стены, виноградники и река вместе."
+  },
+  {
+    title: "Bacharach — the oldest town Victor Hugo ever saw",
+    titleRu: "Бахарах — самый старый город, который видел Виктор Гюго",
+    place: "Bacharach",
+    text: "The name Bacharach comes from Latin: 'Bacchi ara,' the altar of Bacchus, the Roman god of wine. Wine has been traded here since Roman times. In 1839, the French writer Victor Hugo visited and later wrote: 'Bacharach is truly the most ancient heap of human dwellings I have ever seen in my life.'",
+    textRu: "Название Бахарах происходит от латинского «Bacchi ara» — «алтарь Вакха», римского бога вина. Вино торгуют здесь ещё со времён римлян. В 1839 году французский писатель Виктор Гюго побывал здесь и потом написал: «Бахарах — правда, самое древнее скопление человеческих жилищ, какое я видел в своей жизни».",
+    extra: "In the 1400s, about 6,000 people lived in Bacharach — a big number for that time. Then came plagues, fires, and religious wars. The town emptied out. For 200 years now, it has stayed a small place of under 2,000 people. Above the town stands the Wernerkapelle, a ruined Gothic chapel from the 1200s. It was built after a boy named Werner was found dead nearby. At the time, local Jews were wrongly blamed for his death — a false accusation that led to terrible violence against them. Historians agree today that the accusation was untrue. A memorial plaque in the ruin now honors the victims. French troops damaged the chapel in 1689, and it has stood as a roofless ruin ever since. Bacharach also runs a local 'ghost tour' today, pointing out old buildings — like the Posthof — with spooky stories attached. Some of these stories are hard to verify, so treat them as local color rather than confirmed history.",
+    extraRu: "В XV веке в Бахарахе жило около 6000 человек — очень много для того времени. Потом пришли чума, пожары и религиозные войны. Город опустел. Уже 200 лет он остаётся небольшим местом, где живёт меньше 2000 человек. Над городом стоит Вернеркапелле — руины готической часовни XIII века. Её построили после того, как рядом нашли мёртвого мальчика по имени Вернер. Тогда местных евреев ложно обвинили в его смерти — это лживое обвинение привело к страшному насилию против них. Сегодня историки согласны, что обвинение было неправдой. Памятная табличка в руинах сейчас чтит память жертв. Французские войска повредили часовню в 1689 году, и с тех пор она стоит без крыши. Сегодня в Бахарахе также проводят местную «экскурсию с привидениями» — показывают старые здания, например Постхоф, с жуткими историями. Некоторые из этих историй трудно проверить, так что стоит воспринимать их как местный колорит, а не подтверждённую историю.",
+    hook: "Six thousand people once lived here. Today it's under two thousand — and Victor Hugo still called it the oldest town he'd ever seen.",
+    hookRu: "Когда-то здесь жили шесть тысяч человек. Сегодня — меньше двух тысяч. А Виктор Гюго всё равно назвал это самым старым городом, который он видел."
+  },
+  {
+    title: "Kaub — wine, tolls and Blücher", titleRu: "Кауб — вино, пошлины и Блюхер",
+    place: "Kaub",
+    text: "Kaub was a working river town shaped by wine, shipping and toll collection. Historical records preserve surprisingly detailed information about the wines traded here, including spiced and heated varieties.",
+    textRu: "Кауб был рабочим речным городком, сформированным вином, судоходством и сбором пошлин. Исторические записи сохранили удивительно подробную информацию о винах, которыми здесь торговали, включая пряные и подогретые сорта.",
+    extra: "Kaub is also linked to the crossing of Prussian Field Marshal Blücher in 1814, one of the memorable military episodes of the Napoleonic period on the Rhine. Local tradition adds the romantic story of Elslein von Kaub; it should be presented as legend rather than contemporary medieval fact.",
+    extraRu: "Кауб также связан с переправой прусского фельдмаршала Блюхера в 1814 году — одним из памятных военных эпизодов наполеоновской эпохи на Рейне. Местная традиция добавляет романтическую историю Эльслайн фон Кауб; её стоит подавать именно как легенду, а не как исторический факт.",
+    hook: "Kaub is where the Rhine becomes a story about money, wine and armies — all using the same river.",
+    hookRu: "В Каубе Рейн становится историей про деньги, вино и армии — и всё это на одной и той же реке."
+  },
+  {
+    title: "Pfalzgrafenstein — the toll castle in the river", titleRu: "Пфальцграфенштайн — таможенный замок посреди реки",
+    place: "Kaub / Rhine island",
+    text: "Pfalzgrafenstein was built as a toll station on a tiny rocky island. Its extraordinary ship-like shape makes its purpose immediately visible: it was not designed as a comfortable palace, but as a working obstacle in the river.",
+    textRu: "Пфальцграфенштайн был построен как таможенная станция на крошечном скалистом острове. Его необычная, похожая на корабль форма сразу выдаёт его предназначение: это не уютный дворец, а рабочее препятствие прямо в реке.",
+    extra: "The castle's famous location makes it one of the strongest visual moments of the journey. The romantic stories about countesses waiting here for childbirth are legend; its documented function was connected with collecting tolls from passing traffic.",
+    extraRu: "Знаменитое расположение замка делает его одним из самых сильных визуальных моментов путешествия. Романтические истории о графинях, приезжавших сюда рожать, — легенда; документально подтверждённая функция замка была связана со сбором пошлин с проходящих судов.",
+    hook: "Imagine paying your river toll to a castle sitting in the middle of the Rhine.",
+    hookRu: "Представьте, что платите речную пошлину замку, стоящему прямо посреди Рейна."
+  },
+  {
+    title: "Reichenstein, Rheinstein and Sooneck — three faces of the ruin", titleRu: "Райхенштайн, Райнштайн и Зонек — три облика руины",
+    place: "Trechtingshausen / Niederheimbach",
+    text: "This cluster shows three different responses to the medieval castle past. Reichenstein became associated with the robber-knight tradition and was later rebuilt in a neo-Gothic style. Rheinstein became an early showcase of Romantic restoration. Sooneck was also rebuilt by the Prussian royal family, but with a more restrained medieval character.",
+    textRu: "Эта группа замков показывает три разных ответа на средневековое прошлое. Райхенштайн ассоциируется с традицией рыцарей-разбойников и позже был восстановлен в неоготическом стиле. Райнштайн стал ранней витриной романтической реставрации. Зонек тоже восстановила прусская королевская семья, но в более сдержанном, средневековом духе.",
+    extra: "The contrast is useful for tourists: from the river, all three may look like medieval castles, but their present appearance belongs to very different moments in history.",
+    extraRu: "Этот контраст полезен для туристов: с реки все три выглядят средневековыми замками, но их нынешний облик принадлежит совершенно разным моментам истории.",
+    hook: "On this short stretch, you can watch the 19th century reinvent the Middle Ages three different ways.",
+    hookRu: "На этом коротком отрезке видно, как XIX век трижды по-разному переизобрёл Средневековье."
+  },
+  {
+    title: "The vanishing vineyards — wine, then and now",
+    titleRu: "Исчезающие виноградники — вино вчера и сегодня",
+    place: "Mittelrhein region",
+    text: "In 1900, vineyards covered about 2,200 hectares along the whole Mittelrhein. Today, only about 460 hectares are left — less than a quarter. Two world wars, hard years afterward, and the sheer difficulty of hand-farming these steep slopes all pushed many families to give up their vines.",
+    textRu: "В 1900 году виноградники на всём Среднем Рейне занимали около 2200 гектаров. Сегодня осталось только около 460 гектаров — меньше четверти. Две мировые войны, тяжёлые годы после них и просто тяжесть ручного труда на таких крутых склонах заставили многие семьи отказаться от своих виноградников.",
+    extra: "Official statistics show the collapse clearly: in 1989 there were 490 wine-growing businesses in the Mittelrhein region. By 1999 that number had fallen to 303. By 2010 it was down to just 149 — roughly a 70% drop in only 20 years. Today about 165 wine-growing businesses remain, and most are small — under 10 hectares each. A town like Bacharach, with almost 1,850 people, counts as one of the bigger villages in the valley. Many neighboring villages, like Niederheimbach, have only around 750 people. Small population, steep vineyards, hard work — that's the real, everyday Mittelrhein behind the postcard view.",
+    extraRu: "Официальная статистика ясно показывает обвал: в 1989 году в регионе Средний Рейн было 490 винодельческих хозяйств. К 1999 году их число упало до 303. К 2010 году — всего до 149, то есть падение примерно на 70% всего за 20 лет. Сегодня в регионе осталось около 165 винодельческих хозяйств, и большинство из них маленькие — меньше 10 гектаров. Такой город, как Бахарах, с почти 1850 жителями, считается одним из крупных посёлков в долине. Многие соседние деревни, например Нидерхаймбах, насчитывают всего около 750 человек. Маленькое население, крутые склоны, тяжёлый труд — вот настоящий, будничный Средний Рейн за красивой картинкой.",
+    hook: "A hundred years ago, vineyards covered four times more land than today. Most of that hillside work has simply disappeared.",
+    hookRu: "Сто лет назад виноградники занимали в четыре раза больше земли, чем сегодня. Бо́льшая часть этой работы на склонах просто исчезла."
+  },
+  {
+    title: "Bingen and the Mäuseturm — history, then legend",
+    titleRu: "Бинген и Mäuseturm — сначала история, потом легенда",
+    place: "Bingen / Mäuseturm",
+    text: "HISTORY: Bingen is much older than its romantic tourist image. Celts and then Romans settled here, where the Rhine meets the river Nahe — a natural gateway into the gorge. The little tower on the island nearby, the Mäuseturm, was a real toll and signal station from the 1200s onward, rebuilt in 1855.",
+    textRu: "ИСТОРИЯ: Бинген гораздо старше своего романтичного туристического образа. Здесь селились сначала кельты, потом римляне — там, где Рейн встречается с рекой Наэ, естественные ворота в ущелье. Маленькая башня на соседнем острове, Mäuseturm, с XIII века была настоящей таможенной и сигнальной станцией, перестроенной в 1855 году.",
+    extra: "LEGEND: Everyone knows the tower as the 'Mouse Tower' — because of the story of cruel Bishop Hatto, who locked hungry people in a barn and was later eaten alive by an army of mice. Historians say this never happened. Interesting detail: many linguists think 'Mäuseturm' isn't about mice at all — it may be a corruption of 'Mautturm,' simply meaning 'toll tower.' The mice may have crept into the name almost by accident.",
+    extraRu: "ЛЕГЕНДА: Все знают эту башню как «Мышиную башню» — из-за истории о жестоком епископе Хатто, который запер голодных людей в амбаре, а потом его самого заживо съела армия мышей. Историки говорят, что этого никогда не было. Интересная деталь: многие лингвисты считают, что «Mäuseturm» вообще не про мышей — возможно, это искажённое «Mautturm», то есть просто «таможенная башня». Мыши, похоже, попали в название почти случайно.",
+    hook: "The mice are legend. The tolls were real. And even the name may just be a very old misunderstanding.",
+    hookRu: "Мыши — это легенда. Пошлины были настоящими. А само название, возможно, — просто очень старое недоразумение."
+  },
+  {
+    title: "Rüdesheim — wine meets mass tourism", titleRu: "Рюдесхайм — где вино встречает массовый туризм",
+    place: "Rüdesheim am Rhein",
+    text: "Rüdesheim became one of the best-known wine towns on the Rhine, but its tourist identity is also a product of the 19th century. The Niederwald Monument above the town became a major destination, and transport connections helped visitors reach the viewpoint.",
+    textRu: "Рюдесхайм стал одним из самых известных винных городов Рейна, но его туристический облик — тоже во многом продукт XIX века. Памятник Нидервальд над городом стал важной достопримечательностью, а транспортное сообщение помогло гостям добираться до смотровой площадки.",
+    extra: "The town also offers wonderfully unexpected stories: Siegfried's Mechanical Music Cabinet contains hundreds of self-playing instruments, while the old transport infrastructure around the Drosselgasse recalls a time when animals and people helped move goods and boats along the river.",
+    extraRu: "Город также хранит удивительно неожиданные истории: Музей механических музыкальных инструментов Зигфрида насчитывает сотни самоиграющих инструментов, а старая транспортная инфраструктура вокруг Дроссельгассе напоминает о временах, когда люди и животные помогали двигать товары и лодки по реке.",
+    hook: "Rüdesheim is where the medieval wine town meets the age of organized tourism.",
+    hookRu: "Рюдесхайм — место, где средневековый винный город встречается с эпохой организованного туризма."
+  },
+  {
+    title: "The Rhine itself — the road that made everything possible", titleRu: "Сам Рейн — дорога, благодаря которой всё стало возможным",
+    place: "Koblenz → Bingen",
+    text: "The most important 'place' on the route is the river itself. For centuries the Rhine was a highway for goods, soldiers, pilgrims and travellers — but also a source of danger and a place where rulers could charge tolls.",
+    textRu: "Самое важное «место» на маршруте — сама река. Веками Рейн был магистралью для товаров, солдат, паломников и путешественников — но и источником опасности, и местом, где правители могли собирать пошлины.",
+    extra: "That is why the castles are not randomly scattered on the hills. They form a historical network around one of Europe's great transport corridors. The vineyards and towns developed alongside the same river economy.",
+    extraRu: "Поэтому замки на холмах разбросаны не случайно. Они образуют историческую сеть вокруг одного из великих транспортных коридоров Европы. Виноградники и города развивались вместе с той же речной экономикой.",
+    hook: "The castles are not the story by themselves. The Rhine is the story — the castles were built because the river was there.",
+    hookRu: "Замки сами по себе — не вся история. История — это Рейн, а замки построили именно потому, что здесь была река."
+  },
+  {
+    title: "Why UNESCO chose this whole valley — not just one castle",
+    titleRu: "Почему ЮНЕСКО выбрало всю долину — а не один замок",
+    place: "Upper Middle Rhine Valley",
+    text: "In 2002, UNESCO named this stretch a World Heritage Site: the Upper Middle Rhine Valley, from Bingen and Rüdesheim all the way to Koblenz — about 65 kilometers. Inside that stretch: around 60 small towns and villages, about 40 castles and fortresses, and steep terraced vineyards that cling to the slopes.",
+    textRu: "В 2002 году ЮНЕСКО присвоило этому участку статус объекта Всемирного наследия: Верхняя долина Среднего Рейна, от Бингена и Рюдесхайма до Кобленца — около 65 километров. На этом отрезке: около 60 маленьких городов и деревень, около 40 замков и крепостей, и крутые террасные виноградники, цепляющиеся за склоны.",
+    extra: "UNESCO's point is simple: the value isn't any single castle. It's the whole cultural landscape together — river, towns, vineyards, castles, transport, history and legends, all at once. The vineyards on these steep slopes are over a thousand years old. Most castles were built across roughly a thousand years too, then ruined by 17th-century wars, then reimagined by 18th- and 19th-century Romanticism into the valley we see today. And through all of it, the Rhine has stayed one of Europe's most important transport routes, linking north and south for centuries.",
+    extraRu: "Идея ЮНЕСКО проста: ценность не в каком-то одном замке. Ценность — во всём культурном ландшафте сразу: река, города, виноградники, замки, транспорт, история и легенды — всё вместе. Виноградникам на этих крутых склонах больше тысячи лет. Большинству замков — примерно столько же, потом их разрушили войны XVII века, а потом романтизм XVIII–XIX веков заново придумал их такими, какими мы видим долину сегодня. И через всё это время Рейн остаётся одним из важнейших транспортных путей Европы, веками связывающим север и юг.",
+    hook: "It's not a list of castles. It's one continuous landscape — and that's exactly what UNESCO decided to protect.",
+    hookRu: "Это не список замков. Это единый, цельный ландшафт — и именно его решило защитить ЮНЕСКО."
   }
 ];
 
@@ -1048,26 +1194,65 @@ function renderRouteList() {
 
 function renderInfo() {
   const el = document.getElementById('view-info');
+  const ru = lang === 'ru';
   el.innerHTML = `
     <div class="info-card">
-      <div class="castle-name">${lang === 'ru' ? '👥 Население городов на маршруте' : '👥 Towns along the route — population'}</div>
+      <div class="castle-name">${ru ? '👥 Города по маршруту — население' : '👥 Towns along the route — population'}</div>
+      <p style="margin:4px 0 0; line-height:1.5;">${ru ? 'От Кобленца до Бингена/Рюдесхайма, по порядку маршрута:' : 'From Koblenz to Bingen/Rüdesheim, in route order:'}</p>
       <table class="stat-table">
-        <tr><th>${lang === 'ru' ? 'Город' : 'Town'}</th><th>${lang === 'ru' ? 'Население' : 'Population'}</th></tr>
-        <tr><td>Koblenz</td><td>~114,000</td></tr>
-        <tr><td>Lahnstein</td><td>~18,000</td></tr>
-        <tr><td>Braubach</td><td>~3,000</td></tr>
-        <tr><td>Boppard</td><td>~15,500</td></tr>
-        <tr><td>St. Goar</td><td>~2,900</td></tr>
-        <tr><td>Bacharach</td><td>~1,850</td></tr>
-        <tr><td>Bingen</td><td>~26,000</td></tr>
-        <tr><td>Rüdesheim</td><td>~10,000</td></tr>
+        <tr><th>${ru ? 'Город' : 'Town'}</th><th>${ru ? 'Население' : 'Population'}</th></tr>
+        <tr><td>${ru ? 'Кобленц' : 'Koblenz'}</td><td>~114 000</td></tr>
+        <tr><td>${ru ? 'Ланштайн' : 'Lahnstein'}</td><td>~18 000</td></tr>
+        <tr><td>${ru ? 'Браубах' : 'Braubach'}</td><td>~3 000</td></tr>
+        <tr><td>${ru ? 'Боппард' : 'Boppard'}</td><td>~15 500</td></tr>
+        <tr><td>${ru ? 'Санкт-Гоар' : 'St. Goar'}</td><td>~2 900</td></tr>
+        <tr><td>${ru ? 'Санкт-Гоарсхаузен' : 'St. Goarshausen'}</td><td>~1 300</td></tr>
+        <tr><td>${ru ? 'Обервезель' : 'Oberwesel'}</td><td>~2 900</td></tr>
+        <tr><td>${ru ? 'Бахарах' : 'Bacharach'}</td><td>~1 850</td></tr>
+        <tr><td>${ru ? 'Кауб' : 'Kaub'}</td><td>~1 000</td></tr>
+        <tr><td>${ru ? 'Трехтингсхаузен' : 'Trechtingshausen'}</td><td>~1 500</td></tr>
+        <tr><td>${ru ? 'Нидерхаймбах' : 'Niederheimbach'}</td><td>~750</td></tr>
+        <tr><td>${ru ? 'Бинген' : 'Bingen'}</td><td>~26 000</td></tr>
+        <tr><td>${ru ? 'Рюдесхайм' : 'Rüdesheim'}</td><td>~10 000</td></tr>
       </table>
+      <p style="margin-top:10px;"><b>${ru ? 'Винодельческие хозяйства на Среднем Рейне:' : 'Wine businesses on the Mittelrhein:'}</b></p>
+      <table class="stat-table">
+        <tr><th>${ru ? 'Год' : 'Year'}</th><th>${ru ? 'Хозяйств' : 'Wine-growing businesses'}</th></tr>
+        <tr><td>1989</td><td>490</td></tr>
+        <tr><td>1999</td><td>303</td></tr>
+        <tr><td>2010</td><td>149</td></tr>
+        <tr><td>${ru ? 'Сегодня' : 'Today'}</td><td>~165</td></tr>
+      </table>
+      <p style="margin-top:8px; line-height:1.5;">${ru ? 'Площадь виноградников: около 2200 га в 1900 году → около 460 га сегодня. Большинство оставшихся хозяйств обрабатывают меньше 10 га.' : 'Vineyard area: about 2,200 hectares in 1900 → about 460 hectares today. Most remaining businesses farm under 10 hectares.'}</p>
     </div>
     <div class="info-card">
       <div class="castle-name">UNESCO World Heritage</div>
-      <p style="margin:6px 0 0; line-height:1.5;">Since 2002, the Upper Middle Rhine Valley (~65 km) is a UNESCO World Heritage Site for its unique cultural landscape of castles, vineyards and small towns.</p>
+      <p style="margin:6px 0 0; line-height:1.5;">${ru ? 'С 2002 года Верхняя часть Среднего Рейна (от Кобленца до Бингена, ~65 км) входит в список Всемирного наследия ЮНЕСКО — за культурный ландшафт в целом: замки, виноградники и небольшие города вместе, а не отдельное здание.' : 'Since 2002, the Upper Middle Rhine Valley (Koblenz to Bingen, ~65 km) is a UNESCO World Heritage Site — for the landscape as a whole: castles, vineyards, and small towns together, not any single building.'}</p>
+    </div>
+    <div class="info-card">
+      <div class="castle-name">${ru ? 'Что ещё посмотреть на маршруте' : 'More to see along the route'}</div>
+      <p style="margin:6px 0 0; line-height:1.5;">${ru ? 'Замки — только часть истории. Города, виноградники, римские древности, судоходство, романтизм и знаменитые легенды делают само путешествие интересным.' : 'The castles are only part of the story. Towns, vineyards, Roman remains, river traffic, Romanticism and famous legends make the journey itself worth talking about.'}</p>
+      <button class="route-open-btn" id="openRouteFromInfo" style="margin-top:8px; padding:8px 14px; border-radius:8px; border:1px solid var(--gold); background:transparent; color:var(--terracotta); font-family:var(--sans); font-size:0.85rem; cursor:pointer;">${ru ? '🗺️ НА МАРШРУТЕ →' : '🗺️ ON THE ROUTE →'}</button>
+    </div>
+    <div class="info-card">
+      <div class="castle-name">${ru ? 'Схема разрушений и восстановлений' : 'The rebuild pattern'}</div>
+      <p style="margin:6px 0 0; line-height:1.5;">${ru ? 'Большинство здешних замков были впервые построены в XII–XIV веках, разрушены французскими войсками (XVII–XVIII вв., особенно при Людовике XIV, позже — Наполеоном) и восстановлены в XIX веке — часто прусской королевской семьёй, в духе рейнского романтизма.' : 'Most castles here were first built in the 12th–14th centuries, destroyed by French troops (17th–18th c., especially under Louis XIV and later Napoleon), and rebuilt in the 19th century — often by the Prussian royal family, in the spirit of Rhine Romanticism.'}</p>
+    </div>
+    <div class="info-card">
+      <div class="castle-name">${ru ? 'Жизнь сегодня' : 'Present-day life'}</div>
+      <p style="margin:6px 0 0; line-height:1.5;">${ru ? 'Небольшие города долины живут в основном за счёт виноделия (крутые террасные виноградники Рислинга, в основном ручной труд) и туризма (речные круизы, пешие маршруты, посещение замков). Население здесь — от нескольких сотен до нескольких тысяч человек; Бинген и Рюдесхайм — самые крупные города на двух концах маршрута. На 2029 год запланирована региональная садовая выставка (BUGA).' : "The valley's small towns live mainly on winegrowing (steep terraced Riesling vineyards, mostly hand-worked) and tourism (river cruises, hiking, castle visits). Populations here range from a few hundred to a few thousand — Bingen and Rüdesheim are the larger anchor towns at either end. A regional garden show (BUGA) is planned for 2029."}</p>
+    </div>
+    <div class="info-card">
+      <div class="castle-name">${ru ? 'Паромы — повседневная зависимость' : 'Ferries — everyday dependency'}</div>
+      <p style="margin:6px 0 0; line-height:1.5;">${ru ? 'На этом участке через Рейн нет ни одного моста. Оба берега соединяют небольшие автомобильные паромы. При очень высокой или очень низкой воде паромы перестают ходить — и тогда жителям, которые живут на одном берегу, а работают или учатся на другом, приходится делать большой крюк, иногда на час и больше, пока уровень воды не позволит парому снова ходить.' : 'There is no bridge across the Rhine anywhere in this stretch. Small car ferries connect the two banks. In very high water or very low water, ferries stop running — commuters and schoolchildren living on one side and working or studying on the other then face large detours, sometimes an hour or more, until the water level allows the ferry back.'}</p>
+    </div>
+    <div class="info-card">
+      <div class="castle-name">${ru ? 'Предлагаемый порядок рассказа' : 'Suggested narration order'}</div>
+      <p style="margin:6px 0 0; line-height:1.5;">${ru ? 'Выезжая из Кобленца: вступление про ЮНЕСКО и плотность замков → Штольценфельс/Ланек: схема «разрушение и восстановление» → Марксбург: исключение из правила → изгиб у Boppard: тихий живописный момент → близнецы St. Goar: история про пошлину и соперничество → Лорелей: легенда, а потом — поворот 1801 года → кластер Райнштайн/Райхенштайн/Зонек → паромы: история из повседневной жизни → Пфальцграфенштайн: визуальная кульминация → Бахарах/Мойзетурм/Рюдесхайм: финал маршрута.' : 'Leaving Koblenz: intro UNESCO + castle density → Stolzenfels/Lahneck: the destroy-and-rebuild pattern → Marksburg: the exception → Boppard bend: quiet scenic moment → St. Goar twins: toll/rivalry story → Loreley: legend, then the 1801 twist → Rheinstein/Reichenstein/Sooneck cluster → ferries: everyday-life story → Pfalzgrafenstein: visual punchline → Bacharach/Mäuseturm/Rüdesheim: arrival.'}</p>
     </div>
   `;
+  const routeBtn = document.getElementById('openRouteFromInfo');
+  if (routeBtn) routeBtn.onclick = () => switchView('route');
 }
 
 function initMap() {
