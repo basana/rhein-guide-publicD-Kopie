@@ -291,6 +291,18 @@
     border: none; border-radius: 28px; padding: 14px 30px; font-size: 15px; font-weight: 600;
     display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
   }
+  .splash-lang {
+    position: absolute; z-index: 2;
+    top: calc(14px + env(safe-area-inset-top)); right: 14px;
+    display: flex; gap: 6px;
+  }
+  .splash-lang-btn {
+    font-family: var(--sans); font-size: 12px; font-weight: 600;
+    padding: 6px 11px; border-radius: 14px; cursor: pointer;
+    background: rgba(20,14,6,0.45); color: rgba(252,239,221,0.85);
+    border: 1px solid rgba(201,160,92,0.55);
+  }
+  .splash-lang-btn.active { background: var(--terracotta); color: var(--cream-text); border-color: var(--terracotta); }
 
   /* === PREMIUM-ЗНАЧОК НА ФОТО СТАНЦИИ === */
   .premium-badge {
@@ -350,6 +362,10 @@
 <div class="splash" id="splash">
   <img src="hero-bacharach.jpg" alt="Bacharach, Rhine Gorge">
   <div class="splash-gradient"></div>
+  <div class="splash-lang">
+    <span class="splash-lang-btn" data-lang="en">EN</span>
+    <span class="splash-lang-btn" data-lang="ru">RU</span>
+  </div>
   <div class="splash-content">
     <p class="splash-eyebrow" id="splashEyebrow">Middle Rhine Valley</p>
     <h1 class="splash-title" id="splashTitle">Your Pace.<br>Your Story.<br>Your Rhine.</h1>
@@ -816,7 +832,14 @@ const UI = {
   }
 };
 
-let lang = 'en';
+let lang = (function() {
+  try {
+    const saved = localStorage.getItem('rhineGuideLang');
+    if (saved === 'en' || saved === 'ru') return saved;
+  } catch (e) {}
+  const nav = ((navigator.language || navigator.userLanguage || '') + '').toLowerCase();
+  return nav.indexOf('ru') === 0 ? 'ru' : 'en';
+})();
 let index = 0;
 let scale = 1.0;
 const visited = new Set();
@@ -1163,17 +1186,32 @@ document.getElementById('checkBtn').addEventListener('click', () => {
   renderGuide();
 });
 
+function setLang(newLang) {
+  lang = newLang;
+  try { localStorage.setItem('rhineGuideLang', lang); } catch (e) {}
+  document.querySelectorAll('.pill-btn[data-lang]').forEach(b => b.classList.toggle('active', b.getAttribute('data-lang') === lang));
+  document.querySelectorAll('.splash-lang-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-lang') === lang));
+  renderGuide();
+  renderCastlesList();
+  renderLegendsList();
+  renderRouteList();
+  renderInfo();
+}
+
 document.querySelectorAll('.pill-btn[data-lang]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    lang = btn.getAttribute('data-lang');
-    document.querySelectorAll('.pill-btn[data-lang]').forEach(b => b.classList.toggle('active', b === btn));
-    renderGuide();
-    renderCastlesList();
-    renderLegendsList();
-    renderRouteList();
-    renderInfo();
+  btn.addEventListener('click', () => setLang(btn.getAttribute('data-lang')));
+});
+
+document.querySelectorAll('.splash-lang-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    setLang(btn.getAttribute('data-lang'));
   });
 });
+
+/* синхронизируем активные состояния кнопок языка с определённым при загрузке */
+document.querySelectorAll('.pill-btn[data-lang]').forEach(b => b.classList.toggle('active', b.getAttribute('data-lang') === lang));
+document.querySelectorAll('.splash-lang-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-lang') === lang));
 
 document.getElementById('fontMinus').addEventListener('click', () => { scale = Math.max(0.85, scale - 0.1); renderGuide(); });
 document.getElementById('fontPlus').addEventListener('click', () => { scale = Math.min(1.3, scale + 0.1); renderGuide(); });
