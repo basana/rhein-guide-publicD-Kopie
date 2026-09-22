@@ -269,7 +269,13 @@
   .splash-content { position: relative; z-index: 1; padding: 0 var(--pad) calc(36px + env(safe-area-inset-bottom)); color: var(--cream-text); }
   .splash-eyebrow {
     font-family: var(--sans); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--gold); margin: 0 0 8px; font-weight: 600;
+    color: var(--ink); font-weight: 700;
+    margin: 0 calc(-1 * var(--pad)) 16px;
+    padding: 8px var(--pad);
+    width: calc(100% + 2 * var(--pad));
+    background: rgba(246, 238, 221, 0.94);
+    border-top: 1px solid var(--gold); border-bottom: 1px solid var(--gold);
+    display: block;
   }
   .splash-title {
     font-family: 'EB Garamond', serif; font-weight: 600;
