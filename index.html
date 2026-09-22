@@ -41,7 +41,18 @@
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
     overflow: hidden;
-    position: relative;
+    position: relative; z-index: 0;
+  }
+
+  /* Водяной знак — эмблема-штамп, едва заметна на фоне */
+  .app::before {
+    content: "";
+    position: fixed; bottom: 14px; right: 14px;
+    width: 200px; height: 200px;
+    background-image: url('emblem-stamp.png');
+    background-size: contain; background-repeat: no-repeat; background-position: center;
+    opacity: 0.035;
+    pointer-events: none;
     z-index: 0;
   }
 
@@ -110,21 +121,15 @@
   .view.active { display: block; }
 
   .photo {
-    position: relative; width: auto; aspect-ratio: 3 / 4;
-    margin: -14px calc(-1 * var(--pad)) -86px; border-radius: 0 0 26px 26px; overflow: hidden;
-    background: #E8D9B5; border: none;
+    position: relative; width: 100%; aspect-ratio: 1 / 1;
+    margin: 4px 0 18px; border-radius: 14px; overflow: hidden;
+    background: #E8D9B5; border: 1px solid var(--gold);
     touch-action: pan-y;
     user-select: none;
     -webkit-user-select: none;
   }
   .photo img {
     width: 100%; height: 100%; object-fit: cover; display: block;
-  }
-  .photo::after {
-    content: "";
-    position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(20,15,8,0) 40%, rgba(20,15,8,0.82) 100%);
-    pointer-events: none;
   }
 
   .badge {
@@ -135,7 +140,7 @@
   }
 
   .photo-dots {
-    position: absolute; bottom: 92px; left: 0; right: 0;
+    position: absolute; bottom: 12px; left: 0; right: 0;
     display: flex; justify-content: center; gap: 6px; z-index: 10;
     pointer-events: none;
   }
@@ -149,18 +154,14 @@
   }
 
   .station-title {
-    position: relative; z-index: 2;
-    margin: 0 0 8px; text-align: right; padding: 0 var(--pad);
-    color: var(--cream-text); text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-    font-size: calc(clamp(24px, 7vw, 32px) * var(--scale)); font-weight: 600;
+    margin: 0 0 10px; text-align: center;
+    font-size: calc(clamp(22px, 6vw, 28px) * var(--scale)); font-weight: 600;
   }
 
   .desc {
-    position: relative; z-index: 2;
-    margin: 0 0 18px; text-align: right; padding: 0 var(--pad);
-    columns: 2; column-gap: 20px; column-fill: auto; column-rule: 1px solid rgba(201,160,92,0.5);
-    color: var(--cream-text); text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+    margin: 0 auto 18px; max-width: 38ch; text-align: right;
     font-size: calc(clamp(15px, 4vw, 16.5px) * var(--scale)); line-height: 1.65;
+    font-style: italic; color: var(--ink-soft);
   }
 
   .stats { display: flex; gap: 12px; margin-bottom: 18px; font-family: var(--sans); }
@@ -186,6 +187,14 @@
     padding: 14px; margin-bottom: 14px; font-size: calc(15px * var(--scale)); line-height: 1.6;
   }
   .story-block h4, .legend-block h4 { margin: 0 0 6px; color: var(--terracotta); font-size: 13px; text-transform: uppercase; font-family: var(--sans); letter-spacing: 0.05em; }
+  .story-block p, .legend-block p {
+    columns: 2; column-gap: 18px; column-fill: auto;
+    -webkit-column-fill: auto; column-rule: 1px solid var(--gold);
+    text-align: right;
+  }
+  @media (max-width: 380px) {
+    .story-block p, .legend-block p { columns: 1; text-align: left; }
+  }
 
   .castle-name { font-size: 1.1rem; font-weight: 600; color: var(--terracotta); margin-bottom: 2px; }
   .castle-town { font-size: 0.85rem; color: var(--ink-soft); font-family: var(--sans); margin-bottom: 6px; }
@@ -199,32 +208,6 @@
   .stat-table td { padding: 4px; border-bottom: 1px solid var(--gold); }
 
   #view-map { position: relative; height: 100%; padding: 0 !important; }
-
-  .map-legend {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    z-index: 1000;
-    background: var(--parchment-deep);
-    border: 1px solid var(--gold);
-    border-radius: 10px;
-    padding: 8px 12px;
-    font-family: var(--sans);
-    font-size: 11.5px;
-    color: var(--ink);
-    box-shadow: 0 2px 6px rgba(90, 67, 39, 0.3);
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    max-width: 168px;
-    line-height: 1.3;
-  }
-  .map-legend-item { display: flex; align-items: center; gap: 8px; }
-  .map-legend-icon {
-    width: 20px; height: 20px; border-radius: 50%; flex: 0 0 20px;
-    display: flex; align-items: center; justify-content: center;
-    border: 1.5px solid #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.25);
-  }
   #mapDiv { width: 100%; height: 100%; min-height: 60vh; border-radius: 12px; border: 1px solid var(--gold); }
 
   .map-panel {
@@ -268,25 +251,114 @@
   .progress-fill { height: 100%; background: var(--terracotta); width: 0%; }
   .progress-label { font-size: 11px; color: var(--ink-soft); white-space: nowrap; font-weight: 600; }
 
-  /* Водяной знак-эмблема на фоне сайта */
-  .app::before {
-    content: "";
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    width: 260px;
-    height: 260px;
-    background-image: url('emblem-stamp.png?v=2');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    opacity: 0.045;
-    pointer-events: none;
-    z-index: -1;
+  /* === СПЛЭШ-ЭКРАН === */
+  .splash {
+    position: fixed; inset: 0; z-index: 3000;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    background: #000;
   }
+  .splash.hide { display: none; }
+  .splash img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; object-position: center 32%;
+  }
+  .splash-gradient {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(20,14,6,0) 0%, rgba(20,14,6,0.12) 42%, rgba(20,14,6,0.90) 100%);
+  }
+  .splash-content { position: relative; z-index: 1; padding: 0 var(--pad) calc(36px + env(safe-area-inset-bottom)); color: var(--cream-text); }
+  .splash-eyebrow {
+    font-family: var(--sans); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--gold); margin: 0 0 8px; font-weight: 600;
+  }
+  .splash-title {
+    font-family: 'EB Garamond', serif; font-weight: 600;
+    font-size: clamp(32px, 9vw, 46px); line-height: 1.08; margin: 0 0 10px;
+    text-shadow: 0 2px 16px rgba(0,0,0,0.45);
+  }
+  .splash-tagline {
+    font-size: clamp(14px, 3.6vw, 16px); line-height: 1.5; margin: 0 0 26px;
+    max-width: 34ch; color: rgba(252,239,221,0.92);
+  }
+  .splash-enter {
+    font-family: var(--sans); background: var(--terracotta); color: var(--cream-text);
+    border: none; border-radius: 28px; padding: 14px 30px; font-size: 15px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+  }
+
+  /* === PREMIUM-ЗНАЧОК НА ФОТО СТАНЦИИ === */
+  .premium-badge {
+    position: absolute; bottom: 10px; right: 10px; z-index: 10;
+    display: flex; align-items: center; gap: 5px;
+    background: rgba(90, 67, 39, 0.55);
+    border: 1px solid rgba(201,160,92,0.85); border-radius: 20px;
+    padding: 5px 10px 5px 8px; font-family: var(--sans); font-size: 10.5px;
+    color: var(--cream-text); cursor: pointer; font-weight: 600;
+  }
+  .premium-popup {
+    position: fixed; inset: 0; z-index: 4000; display: none;
+    align-items: flex-end; justify-content: center;
+    background: rgba(20,14,6,0.55);
+  }
+  .premium-popup.open { display: flex; }
+  .premium-popup-card {
+    background: var(--parchment); border: 1.5px solid var(--gold); border-radius: 16px 16px 0 0;
+    padding: 22px var(--pad) calc(22px + env(safe-area-inset-bottom));
+    max-width: 580px; width: 100%; font-family: var(--sans);
+  }
+  .premium-popup-card h4 { margin: 0 0 8px; color: var(--terracotta); font-family: 'EB Garamond', serif; font-size: 19px; }
+  .premium-popup-card p { margin: 0 0 16px; font-size: 14px; line-height: 1.5; color: var(--ink); }
+  .premium-popup-close {
+    width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--gold);
+    background: var(--parchment-deep); color: var(--ink); font-weight: 600; cursor: pointer;
+  }
+
+  /* === ИКОНКА ЗАМКА НА КАРТЕ: терракотовый круг + белый силуэт === */
+  .castle-marker {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--terracotta); border: 2px solid #fff;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 6px rgba(90,67,39,0.45);
+  }
+  .castle-marker img { width: 18px; height: 18px; filter: invert(1) brightness(2); }
+
+  /* === ЛЕГЕНДА КАРТЫ (справа сверху, не перекрывает маркеры) === */
+  .map-legend {
+    position: absolute; z-index: 900; top: 12px; right: 12px;
+    background: rgba(246, 238, 221, 0.95); border: 1px solid var(--gold); border-radius: 10px;
+    padding: 8px 10px; font-family: var(--sans); font-size: 11px; color: var(--ink);
+    box-shadow: 0 4px 14px rgba(90,67,39,0.25); max-width: 152px;
+  }
+  .map-legend-row { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+  .map-legend-row:last-child { margin-bottom: 0; }
+  .map-legend-dot { width: 12px; height: 12px; border-radius: 50%; flex: 0 0 12px; background: #8A6A34; border: 1.5px solid #fff; }
+  .map-legend-icon {
+    width: 14px; height: 14px; border-radius: 50%; flex: 0 0 14px; background: var(--terracotta);
+    border: 1.5px solid #fff; display: flex; align-items: center; justify-content: center;
+  }
+  .map-legend-icon img { width: 8px; height: 8px; filter: invert(1) brightness(2); }
 </style>
 </head>
 <body>
+
+<div class="splash" id="splash">
+  <img src="hero-bacharach.jpg" alt="Bacharach, Rhine Gorge">
+  <div class="splash-gradient"></div>
+  <div class="splash-content">
+    <p class="splash-eyebrow" id="splashEyebrow">Middle Rhine Valley</p>
+    <h1 class="splash-title" id="splashTitle">Your Pace.<br>Your Story.<br>Your Rhine.</h1>
+    <p class="splash-tagline" id="splashTagline">Castles, legends and vineyard towns between Koblenz and Bingen — guided at your own rhythm.</p>
+    <button class="splash-enter" id="splashEnter"><span id="splashEnterLabel">Begin the Journey</span> →</button>
+  </div>
+</div>
+
+<div class="premium-popup" id="premiumPopup">
+  <div class="premium-popup-card">
+    <h4 id="premiumPopupTitle">Another View</h4>
+    <p id="premiumPopupText">An artistic, painterly view of this place is available in the extended guide. Message the guide for an access code to unlock it.</p>
+    <button class="premium-popup-close" id="premiumPopupClose">OK</button>
+  </div>
+</div>
 
 <div class="app">
   <div class="header">
@@ -313,6 +385,9 @@
         <img id="mainPhoto" src="" alt="Location photo">
         <div class="badge" id="badge"></div>
         <div class="photo-dots" id="photoDots"></div>
+        <div class="premium-badge" id="premiumBadge" style="display:none;">
+          <span class="star">✦</span><span id="premiumBadgeLabel">Another view</span>
+        </div>
       </div>
 
       <h1 class="station-title" id="stationTitle"></h1>
@@ -345,7 +420,16 @@
     <!-- КАРТА -->
     <div class="view" id="view-map">
       <div id="mapDiv"></div>
-      <div class="map-legend" id="mapLegend"></div>
+      <div class="map-legend" id="mapLegend">
+        <div class="map-legend-row">
+          <div class="map-legend-icon"><img src="new-vector-castle.png" alt=""></div>
+          <span id="legendCastleLabel">Castle tour</span>
+        </div>
+        <div class="map-legend-row">
+          <div class="map-legend-dot"></div>
+          <span id="legendTownLabel">Town walk</span>
+        </div>
+      </div>
       <div class="map-panel" id="mapPanel">
         <div class="map-panel-head">
           <div style="flex:1">
@@ -386,6 +470,7 @@ const castles = [
   {
     id: "koblenz_altstadt", lat: 50.3600, lng: 7.5978,
     images: ["koblenz_altstadt.jpg", "koblenz_altstadt_2.jpg", "koblenz_altstadt_4.jpg"],
+    premiumImage: true,
     name: "Koblenz Old Town & Deutsches Eck", town: "Koblenz", pop: "~114,000",
     built: "Roman origins / Deutsches Eck 1897", builtRu: "Римское основание / Дез.-Экк 1897",
     destroyed: "Damaged in WWII, restored", destroyedRu: "Поврежден в ВОВ, восстановлен",
@@ -544,6 +629,7 @@ const castles = [
   },
   {
     id: "bacharach", lat: 50.0581089, lng: 7.7657011,
+    premiumImage: true,
     name: "Bacharach", town: "Bacharach", pop: "~1,850",
     built: "12th century town walls", builtRu: "Городские стены XII века",
     destroyed: "Town burned by the French 1689", destroyedRu: "Город сожжён французами в 1689",
@@ -698,13 +784,29 @@ const UI = {
     tabs: ['Guide', 'Locations', 'Map', 'Legends', 'Info', 'Route'],
     stationLabel: (n, t) => `Location ${n} of ${t}`,
     built: 'Built', town: 'Town', play: 'Listen', check: 'Visited',
-    story: 'Historical Facts', legend: 'Legend & Lore'
+    story: 'Historical Facts', legend: 'Legend & Lore',
+    splashEyebrow: 'Middle Rhine Valley',
+    splashTitle: 'Your Pace.<br>Your Story.<br>Your Rhine.',
+    splashTagline: 'Castles, legends and vineyard towns between Koblenz and Bingen — guided at your own rhythm.',
+    splashEnter: 'Begin the Journey',
+    legendCastle: 'Castle tour', legendTown: 'Town walk',
+    premiumBadge: 'Another view',
+    premiumTitle: 'Another View',
+    premiumText: 'An artistic, painterly view of this place is available in the extended guide. Message the guide for an access code to unlock it.'
   },
   ru: {
     tabs: ['Гид', 'Точки', 'Карта', 'Легенды', 'Инфо', 'Маршрут'],
     stationLabel: (n, t) => `Точка ${n} из ${t}`,
     built: 'Построен', town: 'Город', play: 'Слушать', check: 'Посещено',
-    story: 'Исторические факты', legend: 'Легенды и предания'
+    story: 'Исторические факты', legend: 'Легенды и предания',
+    splashEyebrow: 'Средний Рейн',
+    splashTitle: 'Твой темп.<br>Твоя история.<br>Твой Рейн.',
+    splashTagline: 'Замки, легенды и винодельческие городки между Кобленцем и Бингеном — в твоём собственном ритме.',
+    splashEnter: 'Начать путешествие',
+    legendCastle: 'Экскурсия в замке', legendTown: 'Прогулка по городу',
+    premiumBadge: 'Другой взгляд',
+    premiumTitle: 'Другой взгляд',
+    premiumText: 'Художественная версия этого вида доступна в расширенном гиде. Напишите гиду, чтобы получить код доступа.'
   }
 };
 
@@ -790,6 +892,36 @@ function renderGuide() {
   document.getElementById('nextBtn').disabled = index === castles.length - 1;
   renderTabs();
   document.documentElement.style.setProperty('--scale', scale);
+
+  const premiumBadge = document.getElementById('premiumBadge');
+  if (premiumBadge) {
+    premiumBadge.style.display = s.premiumImage ? 'flex' : 'none';
+    document.getElementById('premiumBadgeLabel').textContent = t.premiumBadge;
+  }
+
+  applyStaticText();
+}
+
+function applyStaticText() {
+  const t = UI[lang];
+  const legendCastleEl = document.getElementById('legendCastleLabel');
+  const legendTownEl = document.getElementById('legendTownLabel');
+  if (legendCastleEl) legendCastleEl.textContent = t.legendCastle;
+  if (legendTownEl) legendTownEl.textContent = t.legendTown;
+
+  const pTitle = document.getElementById('premiumPopupTitle');
+  const pText = document.getElementById('premiumPopupText');
+  if (pTitle) pTitle.textContent = t.premiumTitle;
+  if (pText) pText.textContent = t.premiumText;
+
+  const sEyebrow = document.getElementById('splashEyebrow');
+  const sTitle = document.getElementById('splashTitle');
+  const sTagline = document.getElementById('splashTagline');
+  const sEnter = document.getElementById('splashEnterLabel');
+  if (sEyebrow) sEyebrow.textContent = t.splashEyebrow;
+  if (sTitle) sTitle.innerHTML = t.splashTitle;
+  if (sTagline) sTagline.textContent = t.splashTagline;
+  if (sEnter) sEnter.textContent = t.splashEnter;
 }
 
 function updateActivePhoto() {
@@ -909,25 +1041,6 @@ function renderInfo() {
   `;
 }
 
-function renderMapLegend() {
-  const el = document.getElementById('mapLegend');
-  if (!el) return;
-  const castleLabel = lang === 'ru' ? 'Замки — экскурсии в крепости' : 'Castles — fortress tours';
-  const townLabel = lang === 'ru' ? 'Города — экскурсии по старому городу' : 'Towns — old town walking tours';
-  el.innerHTML = `
-    <div class="map-legend-item">
-      <div class="map-legend-icon" style="background:var(--terracotta);">
-        <img src="new-vector-castle.png?v=2" alt="" style="width:70%;height:70%;object-fit:contain;filter:invert(1);">
-      </div>
-      <span>${castleLabel}</span>
-    </div>
-    <div class="map-legend-item">
-      <div class="map-legend-icon" style="background:#8A6A34;"></div>
-      <span>${townLabel}</span>
-    </div>
-  `;
-}
-
 function initMap() {
   if (leafletMap) {
     setTimeout(() => leafletMap.invalidateSize(), 50);
@@ -946,26 +1059,11 @@ function initMap() {
   };
 
   const castleIcon = L.divIcon({
-    className: 'custom-castle-pin',
-    html: `
-      <div style="
-        background: var(--terracotta);
-        border: 2px solid #fff;
-        border-radius: 50%;
-        width: 48px;
-        height: 48px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-        overflow: hidden;
-        padding: 3px;
-      ">
-        <img src="new-vector-castle.png?v=2" alt="Castle" style="width:100%; height:100%; object-fit:contain; filter: invert(1);">
-      </div>
-    `,
-    iconSize: [48, 48],
-    iconAnchor: [24, 24]
+    className: '',
+    html: '<div class="castle-marker"><img src="new-vector-castle.png" alt=""></div>',
+    iconSize: [34, 34],
+    iconAnchor: [17, 17],
+    popupAnchor: [0, -17]
   });
 
   castles.forEach((c, i) => {
@@ -1068,7 +1166,6 @@ document.querySelectorAll('.pill-btn[data-lang]').forEach(btn => {
     renderLegendsList();
     renderRouteList();
     renderInfo();
-    renderMapLegend();
   });
 });
 
@@ -1114,7 +1211,27 @@ renderCastlesList();
 renderLegendsList();
 renderRouteList();
 renderInfo();
-renderMapLegend();
+
+/* СПЛЭШ-ЭКРАН */
+const splashEl = document.getElementById('splash');
+const dismissSplash = () => splashEl.classList.add('hide');
+document.getElementById('splashEnter').addEventListener('click', dismissSplash);
+
+/* PREMIUM-ЗНАЧОК */
+const premiumBadgeEl = document.getElementById('premiumBadge');
+const premiumPopupEl = document.getElementById('premiumPopup');
+if (premiumBadgeEl) {
+  premiumBadgeEl.addEventListener('click', (e) => {
+    e.stopPropagation();
+    premiumPopupEl.classList.add('open');
+  });
+}
+document.getElementById('premiumPopupClose').addEventListener('click', () => {
+  premiumPopupEl.classList.remove('open');
+});
+premiumPopupEl.addEventListener('click', (e) => {
+  if (e.target === premiumPopupEl) premiumPopupEl.classList.remove('open');
+});
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {

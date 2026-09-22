@@ -1,4 +1,4 @@
-const CACHE = 'rhine-design-test-v11'; // при каждом деплое с изменениями увеличивайте v5 -> v6 -> v7 ...
+const CACHE = 'rhine-design-test-v13';
 const ASSETS = ['./index.html', './manifest.json'];
 
 self.addEventListener('install', (event) => {
@@ -10,11 +10,9 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys()
-      .then((keys) => Promise.all(
-        keys.filter((key) => key !== CACHE).map((key) => caches.delete(key))
-      ))
-      .then(() => self.clients.claim())
+    caches.keys().then((keys) =>
+      Promise.all(keys.filter((key) => key !== CACHE).map((key) => caches.delete(key)))
+    ).then(() => self.clients.claim())
   );
 });
 
