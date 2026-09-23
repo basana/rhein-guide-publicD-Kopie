@@ -270,11 +270,12 @@
   .splash-eyebrow {
     font-family: var(--sans); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
     color: var(--ink); font-weight: 700;
-    margin: 0 calc(-1 * var(--pad)) 16px;
-    padding: 8px var(--pad);
-    width: calc(100% + 2 * var(--pad));
+    margin: 0 0 16px calc(-1 * var(--pad));
+    padding: 8px 20px 8px var(--pad);
+    width: fit-content; max-width: 62%;
     background: rgba(246, 238, 221, 0.94);
-    border-top: 1px solid var(--gold); border-bottom: 1px solid var(--gold);
+    border-top: 1px solid var(--gold); border-bottom: 1px solid var(--gold); border-right: 1px solid var(--gold);
+    border-radius: 0 6px 6px 0;
     display: block;
   }
   .splash-title {
@@ -427,8 +428,9 @@
     </div>
 
     <div id="premiumUnlockedBlock" style="display:none;">
-      <img class="premium-unlocked-img" id="premiumUnlockedImg" src="" alt="Premium view">
-      <p id="premiumUnlockedFallback" style="display:none;">Artwork coming soon for this location.</p>
+      <p id="premiumUnlockedIntro" style="margin:0 0 14px; font-size:14px; line-height:1.5; color:var(--ink);">Access granted.</p>
+      <a class="premium-unlock-btn" id="premiumOpenLink" href="#" target="_blank" rel="noopener" style="display:block; text-decoration:none; text-align:center; box-sizing:border-box;">Open the artwork →</a>
+      <p id="premiumUnlockedFallback" style="display:none; margin-top:12px;">Artwork coming soon for this location.</p>
     </div>
 
     <button class="premium-popup-close" id="premiumPopupClose">OK</button>
@@ -545,7 +547,7 @@ const castles = [
   {
     id: "koblenz_altstadt", lat: 50.3600, lng: 7.5978,
     images: ["koblenz_altstadt.jpg", "koblenz_altstadt_2.jpg", "koblenz_altstadt_4.jpg"],
-    premiumImage: true,
+    premiumImage: true, premiumLink: "",
     name: "Koblenz Old Town & Deutsches Eck", town: "Koblenz", pop: "~114,000",
     built: "Roman origins / Deutsches Eck 1897", builtRu: "Римское основание / Дойчес-Экк 1897",
     destroyed: "Damaged in WWII, restored", destroyedRu: "Поврежден в ВОВ, восстановлен",
@@ -704,7 +706,7 @@ const castles = [
   },
   {
     id: "bacharach", lat: 50.0581089, lng: 7.7657011,
-    premiumImage: true,
+    premiumImage: true, premiumLink: "",
     name: "Bacharach", town: "Bacharach", pop: "~1,850",
     built: "12th century town walls", builtRu: "Городские стены XII века",
     destroyed: "Town burned by the French 1689", destroyedRu: "Город сожжён французами в 1689",
@@ -1019,6 +1021,8 @@ const UI = {
     premiumUnlockBtn: 'Unlock',
     premiumAskHint: 'No code? Ask your guide →',
     premiumCodeWrong: 'Incorrect code. Please try again.',
+    premiumUnlockedIntro: 'Access granted — here is your artwork.',
+    premiumOpenLink: 'Open the artwork →',
     premiumUnlockedFallback: 'Artwork for this location is on its way — check back soon.'
   },
   ru: {
@@ -1039,6 +1043,8 @@ const UI = {
     premiumUnlockBtn: 'Разблокировать',
     premiumAskHint: 'Нет кода? Спросите у гида →',
     premiumCodeWrong: 'Неверный код. Попробуйте ещё раз.',
+    premiumUnlockedIntro: 'Доступ открыт — вот ваша картина.',
+    premiumOpenLink: 'Открыть картину →',
     premiumUnlockedFallback: 'Картина для этого места скоро появится — загляните позже.'
   }
 };
@@ -1159,11 +1165,15 @@ function applyStaticText() {
   const pUnlockBtn = document.getElementById('premiumUnlockBtn');
   const pAskHint = document.getElementById('premiumAskHint');
   const pFallback = document.getElementById('premiumUnlockedFallback');
+  const pIntro = document.getElementById('premiumUnlockedIntro');
+  const pOpenLink = document.getElementById('premiumOpenLink');
   if (pLocked) pLocked.textContent = t.premiumLocked;
   if (pCodeInput) pCodeInput.placeholder = t.premiumCodePlaceholder;
   if (pUnlockBtn) pUnlockBtn.textContent = t.premiumUnlockBtn;
   if (pAskHint) pAskHint.textContent = t.premiumAskHint;
   if (pFallback) pFallback.textContent = t.premiumUnlockedFallback;
+  if (pIntro) pIntro.textContent = t.premiumUnlockedIntro;
+  if (pOpenLink) pOpenLink.textContent = t.premiumOpenLink;
 
   const sEyebrow = document.getElementById('splashEyebrow');
   const sTitle = document.getElementById('splashTitle');
@@ -1523,8 +1533,10 @@ const dismissSplash = () => splashEl.classList.add('hide');
 document.getElementById('splashEnter').addEventListener('click', dismissSplash);
 
 /* PREMIUM-ЗНАЧОК И РАЗБЛОКИРОВКА ПО КОДУ */
-// Код меняйте здесь — один код открывает премиум-контент во всём приложении.
-const PREMIUM_CODE = 'RHEIN2026';
+// Один код открывает премиум-контент во всём приложении.
+// Меняйте эту строку в любой момент на свой новый случайный код —
+// достаточно поменять текст между кавычками и снова загрузить файл + новый sw.js.
+const PREMIUM_CODE = 'DJJW-NG26';
 const PREMIUM_UNLOCK_KEY = 'rhineGuidePremiumUnlocked';
 
 function isPremiumUnlocked() {
@@ -1541,20 +1553,25 @@ const premiumUnlockedBlock = document.getElementById('premiumUnlockedBlock');
 const premiumCodeInput = document.getElementById('premiumCodeInput');
 const premiumCodeError = document.getElementById('premiumCodeError');
 const premiumUnlockBtn = document.getElementById('premiumUnlockBtn');
-const premiumUnlockedImg = document.getElementById('premiumUnlockedImg');
 const premiumUnlockedFallback = document.getElementById('premiumUnlockedFallback');
+const premiumOpenLinkEl = document.getElementById('premiumOpenLink');
+const premiumUnlockedIntroEl = document.getElementById('premiumUnlockedIntro');
 
 function showPremiumUnlockedView() {
   const s = castles[index];
   premiumLockedBlock.style.display = 'none';
   premiumUnlockedBlock.style.display = 'block';
-  premiumUnlockedImg.style.display = 'block';
-  premiumUnlockedFallback.style.display = 'none';
-  premiumUnlockedImg.onerror = () => {
-    premiumUnlockedImg.style.display = 'none';
+  // Ссылка на приватное хранилище картины (Google Drive / WeTransfer и т.п.) — заполняется в поле premiumLink у станции.
+  if (s.premiumLink) {
+    premiumOpenLinkEl.style.display = 'block';
+    premiumOpenLinkEl.href = s.premiumLink;
+    premiumUnlockedIntroEl.style.display = 'block';
+    premiumUnlockedFallback.style.display = 'none';
+  } else {
+    premiumOpenLinkEl.style.display = 'none';
+    premiumUnlockedIntroEl.style.display = 'none';
     premiumUnlockedFallback.style.display = 'block';
-  };
-  premiumUnlockedImg.src = `${s.id}_vangogh.jpg`;
+  }
 }
 
 function showPremiumLockedView() {
