@@ -187,13 +187,17 @@
     padding: 14px; margin-bottom: 14px; font-size: calc(15px * var(--scale)); line-height: 1.6;
   }
   .story-block h4, .legend-block h4 { margin: 0 0 6px; color: var(--terracotta); font-size: 13px; text-transform: uppercase; font-family: var(--sans); letter-spacing: 0.05em; }
-  .story-block p, .legend-block p {
-    columns: 2; column-gap: 18px; column-fill: auto;
-    -webkit-column-fill: auto; column-rule: 1px solid var(--gold);
-    text-align: left;
-  }
+  .split-text { display: flex; align-items: flex-start; }
+  .split-text p { margin: 0; flex: 1 1 0; min-width: 0; }
+  .split-text .split-col-right { text-align: right; padding-right: 13px; border-right: 1px solid var(--gold); }
+  .split-text .split-col-left { text-align: left; padding-left: 13px; }
   @media (max-width: 380px) {
-    .story-block p, .legend-block p { columns: 1; text-align: left; }
+    .split-text { flex-direction: column; }
+    .split-text .split-col-right {
+      text-align: left; padding-right: 0; border-right: none;
+      padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid var(--gold);
+    }
+    .split-text .split-col-left { padding-left: 0; }
   }
 
   .castle-name { font-size: 1.1rem; font-weight: 600; color: var(--terracotta); margin-bottom: 2px; }
@@ -501,12 +505,18 @@
 
       <div class="story-block">
         <h4 id="storyTitle"></h4>
-        <p id="stationFacts" style="margin:0;"></p>
+        <div class="split-text" id="stationFactsSplit">
+          <p class="split-col-right" id="stationFactsA"></p>
+          <p class="split-col-left" id="stationFactsB"></p>
+        </div>
       </div>
 
       <div class="legend-block" id="legendContainer" style="display:none;">
         <h4 id="legendTitle"></h4>
-        <p id="stationLegend" style="margin:0;"></p>
+        <div class="split-text" id="stationLegendSplit">
+          <p class="split-col-right" id="stationLegendA"></p>
+          <p class="split-col-left" id="stationLegendB"></p>
+        </div>
       </div>
 
       <div class="actions">
@@ -1140,10 +1150,34 @@ function switchView(viewName) {
   }
 }
 
+// Делит текст на два примерно равных по длине куска (по границе слова),
+// для «расходящейся» двухколоночной вёрстки (обе половины тянутся к разделителю).
+function splitBalanced(text) {
+  const words = (text || '').split(' ').filter(Boolean);
+  if (words.length < 2) return [text || '', ''];
+  const total = text.length;
+  let acc = '';
+  let i = 0;
+  for (; i < words.length; i++) {
+    const next = acc ? acc + ' ' + words[i] : words[i];
+    if (acc.length >= total / 2) break;
+    acc = next;
+  }
+  return [acc, words.slice(i).join(' ')];
+}
+
+function setSplitText(idA, idB, text) {
+  const [a, b] = splitBalanced(text);
+  const elA = document.getElementById(idA);
+  const elB = document.getElementById(idB);
+  if (elA) elA.textContent = a;
+  if (elB) elB.textContent = b;
+}
+
 function renderGuide() {
   const s = castles[index];
   const t = UI[lang];
-  
+
   castlePhotos = (s.images && s.images.length > 0) ? s.images : [`${s.id}.jpg`];
   currentPhotoIdx = 0;
   updateActivePhoto();
@@ -1158,14 +1192,14 @@ function renderGuide() {
   document.getElementById('statBuilt').textContent = lang === 'ru' ? s.builtRu : s.built;
 
   document.getElementById('storyTitle').textContent = t.story;
-  document.getElementById('stationFacts').textContent = lang === 'ru' ? s.factsRu : s.facts;
+  setSplitText('stationFactsA', 'stationFactsB', lang === 'ru' ? s.factsRu : s.facts);
 
   const legendBox = document.getElementById('legendContainer');
   const legendTxt = lang === 'ru' ? s.legendRu : s.legend;
   if (legendTxt) {
     legendBox.style.display = 'block';
     document.getElementById('legendTitle').textContent = t.legend;
-    document.getElementById('stationLegend').textContent = legendTxt;
+    setSplitText('stationLegendA', 'stationLegendB', legendTxt);
   } else {
     legendBox.style.display = 'none';
   }
