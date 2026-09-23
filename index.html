@@ -264,23 +264,25 @@
   }
   .splash-gradient {
     position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(20,14,6,0) 0%, rgba(20,14,6,0.12) 42%, rgba(20,14,6,0.90) 100%);
+    background:
+      linear-gradient(135deg, rgba(20,14,6,0) 0%, rgba(20,14,6,0.05) 30%, rgba(20,14,6,0.42) 62%, rgba(20,14,6,0.88) 100%),
+      linear-gradient(180deg, rgba(20,14,6,0) 52%, rgba(20,14,6,0.55) 100%);
   }
   .splash-content { position: relative; z-index: 1; padding: 0 var(--pad) calc(36px + env(safe-area-inset-bottom)); color: var(--cream-text); }
   .splash-eyebrow {
-    font-family: var(--sans); font-size: 12.5px; letter-spacing: 0.16em; text-transform: uppercase;
-    color: var(--cream-text); font-weight: 700;
+    font-family: var(--sans); font-size: 12.5px; letter-spacing: 0.19em; text-transform: uppercase;
+    color: var(--cream-text); font-weight: 700; opacity: 0.86;
     margin: 0 0 14px;
     text-shadow: 0 2px 10px rgba(0,0,0,0.65), 0 1px 3px rgba(0,0,0,0.8);
     display: block;
   }
   .splash-title {
     font-family: 'EB Garamond', serif; font-weight: 600;
-    font-size: clamp(32px, 9vw, 46px); line-height: 1.08; margin: 0 0 10px;
+    font-size: clamp(30px, 8.3vw, 42px); line-height: 1.05; margin: 0 0 9px;
     text-shadow: 0 2px 16px rgba(0,0,0,0.45);
   }
   .splash-tagline {
-    font-size: clamp(19px, 5vw, 21px); line-height: 1.5; margin: 0 0 26px;
+    font-size: clamp(19px, 5vw, 21px); line-height: 1.42; margin: 0 0 26px;
     max-width: 34ch; color: rgba(252,239,221,0.92);
   }
   .splash-enter {
@@ -384,6 +386,32 @@
     border: 1.5px solid #fff; display: flex; align-items: center; justify-content: center;
   }
   .map-legend-icon img { width: 8px; height: 8px; filter: invert(1) brightness(2); }
+
+  /* === GPS-КНОПКА НА КАРТЕ (ПРЕМИУМ) === */
+  .gps-toggle-btn {
+    position: absolute; z-index: 900; top: 12px; left: 12px;
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(246, 238, 221, 0.95); border: 1px solid var(--gold); border-radius: 20px;
+    padding: 7px 12px 7px 10px; font-family: var(--sans); font-size: 12px; font-weight: 700;
+    color: var(--ink); cursor: pointer; box-shadow: 0 4px 14px rgba(90,67,39,0.25);
+  }
+  .gps-toggle-btn.active { background: linear-gradient(135deg, var(--terracotta), #8f4a22); color: #fff; border-color: rgba(255,255,255,0.75); }
+  .gps-toggle-btn .lock-star { font-size: 11px; color: var(--terracotta); }
+  .gps-toggle-btn.active .lock-star { display: none; }
+  .gps-user-halo {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: rgba(181,96,46,0.35); display: flex; align-items: center; justify-content: center;
+    animation: gpsHaloPulse 1.8s ease-in-out infinite;
+  }
+  .gps-user-halo::after {
+    content: ''; width: 10px; height: 10px; border-radius: 50%;
+    background: var(--terracotta); border: 2px solid #fff; box-shadow: 0 0 4px rgba(0,0,0,0.4);
+  }
+  @keyframes gpsHaloPulse {
+    0% { box-shadow: 0 0 0 0 rgba(181,96,46,0.5); }
+    70% { box-shadow: 0 0 0 14px rgba(181,96,46,0); }
+    100% { box-shadow: 0 0 0 0 rgba(181,96,46,0); }
+  }
 </style>
 </head>
 <body>
@@ -398,7 +426,7 @@
   <div class="splash-content">
     <p class="splash-eyebrow" id="splashEyebrow">Middle Rhine Valley</p>
     <h1 class="splash-title" id="splashTitle">Your Pace.<br>Your Story.<br>Your Rhine.</h1>
-    <p class="splash-tagline" id="splashTagline">Castles, legends and vineyard towns between Koblenz and Bingen —<br>guided at your own rhythm.</p>
+    <p class="splash-tagline" id="splashTagline">Castles, legends and vineyard towns<br>between Koblenz and Bingen —<br>guided at your own rhythm.</p>
     <button class="splash-enter" id="splashEnter"><span id="splashEnterLabel">Begin the Journey</span> →</button>
   </div>
 </div>
@@ -493,6 +521,9 @@
     <!-- КАРТА -->
     <div class="view" id="view-map">
       <div id="mapDiv"></div>
+      <button class="gps-toggle-btn" id="gpsToggleBtn">
+        <span class="lock-star">✦</span><span>📍</span><span id="gpsToggleLabel">GPS</span>
+      </button>
       <div class="map-legend" id="mapLegend">
         <div class="map-legend-row">
           <div class="map-legend-icon"><img src="new-vector-castle.png" alt=""></div>
@@ -1006,7 +1037,7 @@ const UI = {
     story: 'Historical Facts', legend: 'Legend & Lore',
     splashEyebrow: 'Middle Rhine Valley',
     splashTitle: 'Your Pace.<br>Your Story.<br>Your Rhine.',
-    splashTagline: 'Castles, legends and vineyard towns between Koblenz and Bingen —<br>guided at your own rhythm.',
+    splashTagline: 'Castles, legends and vineyard towns<br>between Koblenz and Bingen —<br>guided at your own rhythm.',
     splashEnter: 'Begin the Journey',
     legendCastle: 'Castle tour', legendTown: 'Town walk',
     premiumBadge: 'Another view',
@@ -1019,7 +1050,12 @@ const UI = {
     premiumCodeWrong: 'Incorrect code. Please try again.',
     premiumUnlockedIntro: 'Access granted — here is your artwork.',
     premiumOpenLink: 'Open the artwork →',
-    premiumUnlockedFallback: 'Artwork for this location is on its way — check back soon.'
+    premiumUnlockedFallback: 'Artwork for this location is on its way — check back soon.',
+    premiumTitleGps: 'GPS Auto-Locate',
+    premiumTextGps: 'Let the app sense where you are and open the right station automatically — no scrolling or searching. Available in the bonus edition.',
+    gpsToggle: 'GPS', gpsOn: 'GPS ON',
+    gpsLocating: 'Locating…',
+    gpsError: 'Could not get your location. Check location permissions.'
   },
   ru: {
     tabs: ['Гид', 'Точки', 'Карта', 'Легенды', 'Инфо', 'Маршрут'],
@@ -1041,7 +1077,12 @@ const UI = {
     premiumCodeWrong: 'Неверный код. Попробуйте ещё раз.',
     premiumUnlockedIntro: 'Доступ открыт — вот ваша картина.',
     premiumOpenLink: 'Открыть картину →',
-    premiumUnlockedFallback: 'Картина для этого места скоро появится — загляните позже.'
+    premiumUnlockedFallback: 'Картина для этого места скоро появится — загляните позже.',
+    premiumTitleGps: 'GPS-автоопределение',
+    premiumTextGps: 'Пусть приложение само определит, где вы находитесь, и откроет нужную станцию — без пролистывания и поиска. Доступно в бонусной версии.',
+    gpsToggle: 'GPS', gpsOn: 'GPS ВКЛ',
+    gpsLocating: 'Определяем…',
+    gpsError: 'Не удалось определить местоположение. Проверьте разрешения геолокации.'
   }
 };
 
@@ -1060,6 +1101,9 @@ let leafletMap = null;
 let selectedIndex = -1;
 let currentPhotoIdx = 0;
 let castlePhotos = [];
+let gpsActive = false;
+let gpsWatchId = null;
+let gpsMarker = null;
 
 function renderTabs() {
   const tabsEl = document.getElementById('tabs');
@@ -1170,6 +1214,9 @@ function applyStaticText() {
   if (pFallback) pFallback.textContent = t.premiumUnlockedFallback;
   if (pIntro) pIntro.textContent = t.premiumUnlockedIntro;
   if (pOpenLink) pOpenLink.textContent = t.premiumOpenLink;
+
+  const gpsLabelEl = document.getElementById('gpsToggleLabel');
+  if (gpsLabelEl && !gpsActive) gpsLabelEl.textContent = t.gpsToggle;
 
   const sEyebrow = document.getElementById('splashEyebrow');
   const sTitle = document.getElementById('splashTitle');
@@ -1553,6 +1600,28 @@ const premiumUnlockedFallback = document.getElementById('premiumUnlockedFallback
 const premiumOpenLinkEl = document.getElementById('premiumOpenLink');
 const premiumUnlockedIntroEl = document.getElementById('premiumUnlockedIntro');
 
+let premiumPopupKind = 'view'; // 'view' (Van Gogh картина) или 'gps' (GPS-автоопределение)
+
+function openPremiumPopup(kind) {
+  premiumPopupKind = kind;
+  const t = UI[lang];
+  const pTitle = document.getElementById('premiumPopupTitle');
+  const pText = document.getElementById('premiumPopupText');
+  if (kind === 'gps') {
+    if (pTitle) pTitle.textContent = t.premiumTitleGps;
+    if (pText) pText.textContent = t.premiumTextGps;
+  } else {
+    if (pTitle) pTitle.textContent = t.premiumTitle;
+    if (pText) pText.textContent = t.premiumText;
+  }
+  if (isPremiumUnlocked() && kind === 'view') {
+    showPremiumUnlockedView();
+  } else {
+    showPremiumLockedView();
+  }
+  premiumPopupEl.classList.add('open');
+}
+
 function showPremiumUnlockedView() {
   const s = castles[index];
   premiumLockedBlock.style.display = 'none';
@@ -1580,9 +1649,7 @@ function showPremiumLockedView() {
 if (premiumBadgeEl) {
   premiumBadgeEl.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (isPremiumUnlocked()) showPremiumUnlockedView();
-    else showPremiumLockedView();
-    premiumPopupEl.classList.add('open');
+    openPremiumPopup('view');
   });
 }
 
@@ -1591,10 +1658,91 @@ if (premiumUnlockBtn) {
     const entered = (premiumCodeInput.value || '').trim();
     if (entered.toUpperCase() === PREMIUM_CODE.toUpperCase()) {
       setPremiumUnlocked();
-      showPremiumUnlockedView();
+      if (premiumPopupKind === 'gps') {
+        premiumPopupEl.classList.remove('open');
+        toggleGps();
+      } else {
+        showPremiumUnlockedView();
+      }
     } else {
       premiumCodeError.textContent = UI[lang].premiumCodeWrong;
     }
+  });
+}
+
+/* GPS-АВТООПРЕДЕЛЕНИЕ (ПРЕМИУМ) */
+const gpsToggleBtn = document.getElementById('gpsToggleBtn');
+const gpsToggleLabel = document.getElementById('gpsToggleLabel');
+
+function findNearestCastleIndex(lat, lng) {
+  let best = -1, bestDist = Infinity;
+  castles.forEach((c, i) => {
+    if (typeof c.lat !== 'number') return;
+    const d = Math.pow(c.lat - lat, 2) + Math.pow(c.lng - lng, 2);
+    if (d < bestDist) { bestDist = d; best = i; }
+  });
+  return best;
+}
+
+function stopGps() {
+  gpsActive = false;
+  if (gpsWatchId !== null && navigator.geolocation) {
+    navigator.geolocation.clearWatch(gpsWatchId);
+    gpsWatchId = null;
+  }
+  if (gpsMarker && leafletMap) { leafletMap.removeLayer(gpsMarker); gpsMarker = null; }
+  gpsToggleBtn.classList.remove('active');
+  gpsToggleLabel.textContent = UI[lang].gpsToggle;
+}
+
+function startGps() {
+  if (!navigator.geolocation) { gpsToggleLabel.textContent = UI[lang].gpsError; return; }
+  gpsActive = true;
+  gpsToggleBtn.classList.add('active');
+  gpsToggleLabel.textContent = UI[lang].gpsLocating;
+
+  gpsWatchId = navigator.geolocation.watchPosition(
+    (pos) => {
+      const { latitude, longitude } = pos.coords;
+      gpsToggleLabel.textContent = UI[lang].gpsOn;
+
+      if (!leafletMap) initMap();
+
+      const haloIcon = L.divIcon({
+        className: '', html: '<div class="gps-user-halo"></div>',
+        iconSize: [22, 22], iconAnchor: [11, 11]
+      });
+      if (gpsMarker) {
+        gpsMarker.setLatLng([latitude, longitude]);
+      } else if (leafletMap) {
+        gpsMarker = L.marker([latitude, longitude], { icon: haloIcon, zIndexOffset: 1000 }).addTo(leafletMap);
+      }
+      if (leafletMap) leafletMap.panTo([latitude, longitude]);
+
+      const nearest = findNearestCastleIndex(latitude, longitude);
+      if (nearest >= 0 && nearest !== index) {
+        index = nearest;
+        renderGuide();
+      }
+    },
+    () => {
+      gpsToggleLabel.textContent = UI[lang].gpsError;
+      setTimeout(() => stopGps(), 2500);
+    },
+    { enableHighAccuracy: true, maximumAge: 10000, timeout: 15000 }
+  );
+}
+
+function toggleGps() {
+  if (gpsActive) stopGps();
+  else startGps();
+}
+
+if (gpsToggleBtn) {
+  gpsToggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (isPremiumUnlocked()) toggleGps();
+    else openPremiumPopup('gps');
   });
 }
 if (premiumCodeInput) {
