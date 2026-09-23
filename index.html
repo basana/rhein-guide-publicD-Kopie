@@ -268,14 +268,10 @@
   }
   .splash-content { position: relative; z-index: 1; padding: 0 var(--pad) calc(36px + env(safe-area-inset-bottom)); color: var(--cream-text); }
   .splash-eyebrow {
-    font-family: var(--sans); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--ink); font-weight: 700;
-    margin: 0 0 16px calc(-1 * var(--pad));
-    padding: 8px 20px 8px var(--pad);
-    width: fit-content; max-width: 62%;
-    background: rgba(246, 238, 221, 0.94);
-    border-top: 1px solid var(--gold); border-bottom: 1px solid var(--gold); border-right: 1px solid var(--gold);
-    border-radius: 0 6px 6px 0;
+    font-family: var(--sans); font-size: 12.5px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--cream-text); font-weight: 700;
+    margin: 0 0 14px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.65), 0 1px 3px rgba(0,0,0,0.8);
     display: block;
   }
   .splash-title {
@@ -402,7 +398,7 @@
   <div class="splash-content">
     <p class="splash-eyebrow" id="splashEyebrow">Middle Rhine Valley</p>
     <h1 class="splash-title" id="splashTitle">Your Pace.<br>Your Story.<br>Your Rhine.</h1>
-    <p class="splash-tagline" id="splashTagline">Castles, legends and vineyard towns between Koblenz and Bingen — guided at your own rhythm.</p>
+    <p class="splash-tagline" id="splashTagline">Castles, legends and vineyard towns between Koblenz and Bingen —<br>guided at your own rhythm.</p>
     <button class="splash-enter" id="splashEnter"><span id="splashEnterLabel">Begin the Journey</span> →</button>
   </div>
 </div>
@@ -1010,7 +1006,7 @@ const UI = {
     story: 'Historical Facts', legend: 'Legend & Lore',
     splashEyebrow: 'Middle Rhine Valley',
     splashTitle: 'Your Pace.<br>Your Story.<br>Your Rhine.',
-    splashTagline: 'Castles, legends and vineyard towns between Koblenz and Bingen — guided at your own rhythm.',
+    splashTagline: 'Castles, legends and vineyard towns between Koblenz and Bingen —<br>guided at your own rhythm.',
     splashEnter: 'Begin the Journey',
     legendCastle: 'Castle tour', legendTown: 'Town walk',
     premiumBadge: 'Another view',
@@ -1181,7 +1177,7 @@ function applyStaticText() {
   const sEnter = document.getElementById('splashEnterLabel');
   if (sEyebrow) sEyebrow.textContent = t.splashEyebrow;
   if (sTitle) sTitle.innerHTML = t.splashTitle;
-  if (sTagline) sTagline.textContent = t.splashTagline;
+  if (sTagline) sTagline.innerHTML = t.splashTagline;
   if (sEnter) sEnter.textContent = t.splashEnter;
 }
 
