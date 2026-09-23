@@ -389,7 +389,7 @@
 
   /* === GPS-КНОПКА НА КАРТЕ (ПРЕМИУМ) === */
   .gps-toggle-btn {
-    position: absolute; z-index: 900; top: 12px; left: 12px;
+    position: absolute; z-index: 1000; top: 78px; left: 12px;
     display: flex; align-items: center; gap: 6px;
     background: rgba(246, 238, 221, 0.95); border: 1px solid var(--gold); border-radius: 20px;
     padding: 7px 12px 7px 10px; font-family: var(--sans); font-size: 12px; font-weight: 700;
@@ -1042,7 +1042,7 @@ const UI = {
     legendCastle: 'Castle tour', legendTown: 'Town walk',
     premiumBadge: 'Another view',
     premiumTitle: 'Another View',
-    premiumText: 'A painterly, Van Gogh–style view of this place is available in the bonus edition.',
+    premiumText: 'A painterly, hand-styled view of this place is available in the bonus edition.',
     premiumLocked: 'Locked',
     premiumCodePlaceholder: 'Access code',
     premiumUnlockBtn: 'Unlock',
@@ -1069,7 +1069,7 @@ const UI = {
     legendCastle: 'Экскурсия в замке', legendTown: 'Прогулка по городу',
     premiumBadge: 'Другой взгляд',
     premiumTitle: 'Другой взгляд',
-    premiumText: 'Авторский вид в стиле Ван Гога доступен в бонусной версии.',
+    premiumText: 'Авторский живописный вид этого места доступен в бонусной версии.',
     premiumLocked: 'Заблокировано',
     premiumCodePlaceholder: 'Код доступа',
     premiumUnlockBtn: 'Разблокировать',
@@ -1434,7 +1434,7 @@ function initMap() {
 
   if (points.length) {
     L.polyline(points, { color: '#B5602E', weight: 2, opacity: 0.6, dashArray: '4 6' }).addTo(leafletMap);
-    leafletMap.fitBounds(points, { padding: [20, 20] });
+    leafletMap.fitBounds(points, { paddingTopLeft: [24, 130], paddingBottomRight: [24, 24] });
   }
 
   document.getElementById('mapPanelClose').onclick = () => {
@@ -1600,7 +1600,7 @@ const premiumUnlockedFallback = document.getElementById('premiumUnlockedFallback
 const premiumOpenLinkEl = document.getElementById('premiumOpenLink');
 const premiumUnlockedIntroEl = document.getElementById('premiumUnlockedIntro');
 
-let premiumPopupKind = 'view'; // 'view' (Van Gogh картина) или 'gps' (GPS-автоопределение)
+let premiumPopupKind = 'view'; // 'view' (авторская картина) или 'gps' (GPS-автоопределение)
 
 function openPremiumPopup(kind) {
   premiumPopupKind = kind;
