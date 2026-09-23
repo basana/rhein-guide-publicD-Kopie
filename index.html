@@ -283,7 +283,7 @@
     text-shadow: 0 2px 16px rgba(0,0,0,0.45);
   }
   .splash-tagline {
-    font-size: clamp(14px, 3.6vw, 16px); line-height: 1.5; margin: 0 0 26px;
+    font-size: clamp(17px, 4.3vw, 19px); line-height: 1.5; margin: 0 0 26px;
     max-width: 34ch; color: rgba(252,239,221,0.92);
   }
   .splash-enter {
@@ -307,11 +307,18 @@
   /* === PREMIUM-ЗНАЧОК НА ФОТО СТАНЦИИ === */
   .premium-badge {
     position: absolute; bottom: 10px; right: 10px; z-index: 10;
-    display: flex; align-items: center; gap: 5px;
-    background: rgba(90, 67, 39, 0.55);
-    border: 1px solid rgba(201,160,92,0.85); border-radius: 20px;
-    padding: 5px 10px 5px 8px; font-family: var(--sans); font-size: 10.5px;
-    color: var(--cream-text); cursor: pointer; font-weight: 600;
+    display: flex; align-items: center; gap: 6px;
+    background: linear-gradient(135deg, var(--terracotta), #8f4a22);
+    border: 1.5px solid rgba(255,255,255,0.75); border-radius: 20px;
+    padding: 7px 13px 7px 10px; font-family: var(--sans); font-size: 12px;
+    color: #fff; cursor: pointer; font-weight: 700;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.35);
+    animation: premiumPulse 2.2s ease-in-out infinite;
+  }
+  .premium-badge .star { font-size: 13px; filter: drop-shadow(0 0 3px rgba(255,220,150,0.9)); }
+  @keyframes premiumPulse {
+    0%, 100% { box-shadow: 0 2px 10px rgba(0,0,0,0.35), 0 0 0 0 rgba(201,160,92,0.55); }
+    50% { box-shadow: 0 2px 10px rgba(0,0,0,0.35), 0 0 0 6px rgba(201,160,92,0); }
   }
   .premium-popup {
     position: fixed; inset: 0; z-index: 4000; display: none;
@@ -330,6 +337,31 @@
     width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--gold);
     background: var(--parchment-deep); color: var(--ink); font-weight: 600; cursor: pointer;
   }
+  .premium-teaser {
+    position: relative; width: 100%; height: 150px; border-radius: 14px;
+    overflow: hidden; margin-bottom: 16px; border: 1px solid var(--gold);
+    background: radial-gradient(circle at 30% 30%, #f4b860, #7a5230 60%, #3a2a1a);
+    filter: blur(7px); transform: scale(1.08);
+  }
+  .premium-teaser-lock {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: rgba(20,14,6,0.32);
+  }
+  .premium-unlocked-img { width: 100%; border-radius: 14px; margin-bottom: 16px; display: block; border: 1px solid var(--gold); }
+  .premium-code-row { display: flex; gap: 8px; margin-bottom: 6px; }
+  .premium-code-input {
+    flex-grow: 1; padding: 13px 14px; border-radius: 10px; border: 1px solid var(--gold);
+    background: #fff; font-size: 15px; color: var(--ink); box-sizing: border-box; font-family: var(--sans);
+  }
+  .premium-code-error {
+    font-size: 12.5px; color: var(--terracotta); margin: 0 0 12px; min-height: 16px; font-weight: 600;
+  }
+  .premium-unlock-btn {
+    width: 100%; padding: 13px; border-radius: 10px; border: none;
+    background: linear-gradient(135deg, var(--terracotta), #8f4a22); color: #fff;
+    font-weight: 700; font-size: 15px; cursor: pointer; font-family: var(--sans);
+  }
+  .premium-ask-hint { text-align: center; margin-top: 12px; font-size: 12px; color: var(--ink-soft); }
 
   /* === ИКОНКА ЗАМКА НА КАРТЕ: терракотовый круг + белый силуэт === */
   .castle-marker {
@@ -378,6 +410,27 @@
   <div class="premium-popup-card">
     <h4 id="premiumPopupTitle">Another View</h4>
     <p id="premiumPopupText">An artistic, painterly view of this place is available in the extended guide. Message the guide for an access code to unlock it.</p>
+
+    <div id="premiumLockedBlock">
+      <div class="premium-teaser"><div class="premium-teaser-lock">
+        <div style="display:flex; align-items:center; gap:8px; background:rgba(20,14,6,0.6); border:1px solid rgba(255,255,255,0.5); border-radius:20px; padding:8px 16px;">
+          <span style="color:#fff; font-size:16px;">🔒</span>
+          <span style="color:#fff; font-size:13px; font-weight:600;" id="premiumLockedLabel">Locked</span>
+        </div>
+      </div></div>
+      <div class="premium-code-row">
+        <input type="text" class="premium-code-input" id="premiumCodeInput" autocomplete="off" autocapitalize="off">
+      </div>
+      <p class="premium-code-error" id="premiumCodeError"></p>
+      <button class="premium-unlock-btn" id="premiumUnlockBtn">Unlock</button>
+      <div class="premium-ask-hint" id="premiumAskHint">No code? Ask your guide.</div>
+    </div>
+
+    <div id="premiumUnlockedBlock" style="display:none;">
+      <img class="premium-unlocked-img" id="premiumUnlockedImg" src="" alt="Premium view">
+      <p id="premiumUnlockedFallback" style="display:none;">Artwork coming soon for this location.</p>
+    </div>
+
     <button class="premium-popup-close" id="premiumPopupClose">OK</button>
   </div>
 </div>
@@ -494,14 +547,14 @@ const castles = [
     images: ["koblenz_altstadt.jpg", "koblenz_altstadt_2.jpg", "koblenz_altstadt_4.jpg"],
     premiumImage: true,
     name: "Koblenz Old Town & Deutsches Eck", town: "Koblenz", pop: "~114,000",
-    built: "Roman origins / Deutsches Eck 1897", builtRu: "Римское основание / Дез.-Экк 1897",
+    built: "Roman origins / Deutsches Eck 1897", builtRu: "Римское основание / Дойчес-Экк 1897",
     destroyed: "Damaged in WWII, restored", destroyedRu: "Поврежден в ВОВ, восстановлен",
     facts: "Koblenz is over 2,000 years old, founded by the Romans as 'Castellum apud Confluentes'. At the Deutsches Eck, the Moselle river flows into the Rhine, overseen by the monumental equestrian statue of Kaiser Wilhelm I.",
-    factsRu: "Кобленцу более 2000 лет, он основан римлянами как «Castellum apud Confluentes». У Дез-Экк река Мозель впадает в Рейн под взором монументального конного памятника кайзеру Вильгельму I.",
+    factsRu: "Кобленцу более 2000 лет, он основан римлянами как «Castellum apud Confluentes». У Дойчес-Экк река Мозель впадает в Рейн под взором монументального конного памятника кайзеру Вильгельму I.",
     legend: "The city's history is tied to centuries of trade, archbishop-electors, and its pivotal strategic position at the gateway to the Rhine Gorge.",
     legendRu: "История города связана с веками торговли, курфюрстами-архиепископами и важнейшим стратегическим положением у врат в рейнское ущелье.",
     say: "Welcome to Koblenz — where the Rhine and Moselle rivers meet at the famous Deutsches Eck.",
-    sayRu: "Добро пожаловать в Кобленц — место слияния Рейна и Мозеля у знаменитого Дез-Экк."
+    sayRu: "Добро пожаловать в Кобленц — место слияния Рейна и Мозеля у знаменитого Дойчес-Экк."
   },
   {
     id: "ehrenbreitstein", lat: 50.3644, lng: 7.6136,
@@ -960,7 +1013,13 @@ const UI = {
     legendCastle: 'Castle tour', legendTown: 'Town walk',
     premiumBadge: 'Another view',
     premiumTitle: 'Another View',
-    premiumText: 'An artistic, painterly view of this place is available in the extended guide. Message the guide for an access code to unlock it.'
+    premiumText: 'A painterly, Van Gogh–style view of this place is available in the bonus edition.',
+    premiumLocked: 'Locked',
+    premiumCodePlaceholder: 'Access code',
+    premiumUnlockBtn: 'Unlock',
+    premiumAskHint: 'No code? Ask your guide →',
+    premiumCodeWrong: 'Incorrect code. Please try again.',
+    premiumUnlockedFallback: 'Artwork for this location is on its way — check back soon.'
   },
   ru: {
     tabs: ['Гид', 'Точки', 'Карта', 'Легенды', 'Инфо', 'Маршрут'],
@@ -974,7 +1033,13 @@ const UI = {
     legendCastle: 'Экскурсия в замке', legendTown: 'Прогулка по городу',
     premiumBadge: 'Другой взгляд',
     premiumTitle: 'Другой взгляд',
-    premiumText: 'Художественная версия этого вида доступна в расширенном гиде. Напишите гиду, чтобы получить код доступа.'
+    premiumText: 'Авторский вид в стиле Ван Гога доступен в бонусной версии.',
+    premiumLocked: 'Заблокировано',
+    premiumCodePlaceholder: 'Код доступа',
+    premiumUnlockBtn: 'Разблокировать',
+    premiumAskHint: 'Нет кода? Спросите у гида →',
+    premiumCodeWrong: 'Неверный код. Попробуйте ещё раз.',
+    premiumUnlockedFallback: 'Картина для этого места скоро появится — загляните позже.'
   }
 };
 
@@ -1088,6 +1153,17 @@ function applyStaticText() {
   const pText = document.getElementById('premiumPopupText');
   if (pTitle) pTitle.textContent = t.premiumTitle;
   if (pText) pText.textContent = t.premiumText;
+
+  const pLocked = document.getElementById('premiumLockedLabel');
+  const pCodeInput = document.getElementById('premiumCodeInput');
+  const pUnlockBtn = document.getElementById('premiumUnlockBtn');
+  const pAskHint = document.getElementById('premiumAskHint');
+  const pFallback = document.getElementById('premiumUnlockedFallback');
+  if (pLocked) pLocked.textContent = t.premiumLocked;
+  if (pCodeInput) pCodeInput.placeholder = t.premiumCodePlaceholder;
+  if (pUnlockBtn) pUnlockBtn.textContent = t.premiumUnlockBtn;
+  if (pAskHint) pAskHint.textContent = t.premiumAskHint;
+  if (pFallback) pFallback.textContent = t.premiumUnlockedFallback;
 
   const sEyebrow = document.getElementById('splashEyebrow');
   const sTitle = document.getElementById('splashTitle');
@@ -1446,15 +1522,74 @@ const splashEl = document.getElementById('splash');
 const dismissSplash = () => splashEl.classList.add('hide');
 document.getElementById('splashEnter').addEventListener('click', dismissSplash);
 
-/* PREMIUM-ЗНАЧОК */
+/* PREMIUM-ЗНАЧОК И РАЗБЛОКИРОВКА ПО КОДУ */
+// Код меняйте здесь — один код открывает премиум-контент во всём приложении.
+const PREMIUM_CODE = 'RHEIN2026';
+const PREMIUM_UNLOCK_KEY = 'rhineGuidePremiumUnlocked';
+
+function isPremiumUnlocked() {
+  try { return localStorage.getItem(PREMIUM_UNLOCK_KEY) === 'true'; } catch (e) { return false; }
+}
+function setPremiumUnlocked() {
+  try { localStorage.setItem(PREMIUM_UNLOCK_KEY, 'true'); } catch (e) {}
+}
+
 const premiumBadgeEl = document.getElementById('premiumBadge');
 const premiumPopupEl = document.getElementById('premiumPopup');
+const premiumLockedBlock = document.getElementById('premiumLockedBlock');
+const premiumUnlockedBlock = document.getElementById('premiumUnlockedBlock');
+const premiumCodeInput = document.getElementById('premiumCodeInput');
+const premiumCodeError = document.getElementById('premiumCodeError');
+const premiumUnlockBtn = document.getElementById('premiumUnlockBtn');
+const premiumUnlockedImg = document.getElementById('premiumUnlockedImg');
+const premiumUnlockedFallback = document.getElementById('premiumUnlockedFallback');
+
+function showPremiumUnlockedView() {
+  const s = castles[index];
+  premiumLockedBlock.style.display = 'none';
+  premiumUnlockedBlock.style.display = 'block';
+  premiumUnlockedImg.style.display = 'block';
+  premiumUnlockedFallback.style.display = 'none';
+  premiumUnlockedImg.onerror = () => {
+    premiumUnlockedImg.style.display = 'none';
+    premiumUnlockedFallback.style.display = 'block';
+  };
+  premiumUnlockedImg.src = `${s.id}_vangogh.jpg`;
+}
+
+function showPremiumLockedView() {
+  premiumLockedBlock.style.display = 'block';
+  premiumUnlockedBlock.style.display = 'none';
+  if (premiumCodeInput) premiumCodeInput.value = '';
+  if (premiumCodeError) premiumCodeError.textContent = '';
+}
+
 if (premiumBadgeEl) {
   premiumBadgeEl.addEventListener('click', (e) => {
     e.stopPropagation();
+    if (isPremiumUnlocked()) showPremiumUnlockedView();
+    else showPremiumLockedView();
     premiumPopupEl.classList.add('open');
   });
 }
+
+if (premiumUnlockBtn) {
+  premiumUnlockBtn.addEventListener('click', () => {
+    const entered = (premiumCodeInput.value || '').trim();
+    if (entered.toUpperCase() === PREMIUM_CODE.toUpperCase()) {
+      setPremiumUnlocked();
+      showPremiumUnlockedView();
+    } else {
+      premiumCodeError.textContent = UI[lang].premiumCodeWrong;
+    }
+  });
+}
+if (premiumCodeInput) {
+  premiumCodeInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') premiumUnlockBtn.click();
+  });
+}
+
 document.getElementById('premiumPopupClose').addEventListener('click', () => {
   premiumPopupEl.classList.remove('open');
 });
