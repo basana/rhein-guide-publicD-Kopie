@@ -411,15 +411,42 @@
   .gps-toggle-btn.active { background: linear-gradient(135deg, var(--terracotta), #8f4a22); color: #fff; border-color: rgba(255,255,255,0.75); }
   .gps-toggle-btn .lock-star { font-size: 11px; color: var(--terracotta); }
   .gps-toggle-btn.active .lock-star { display: none; }
-  .gps-distance-panel {
+  .gps-panel {
     position: absolute; z-index: 1000; top: 126px; left: 12px; display: none;
+    flex-direction: column; gap: 7px; max-width: 210px;
+  }
+  .gps-panel.show { display: flex; }
+  .gps-panel-row {
+    display: none; align-items: center; gap: 8px;
     background: rgba(246, 238, 221, 0.95); border: 1px solid var(--gold); border-radius: 12px;
     padding: 8px 12px; font-family: var(--sans); color: var(--ink);
-    box-shadow: 0 4px 14px rgba(90,67,39,0.25); max-width: 200px;
+    box-shadow: 0 4px 14px rgba(90,67,39,0.25);
   }
-  .gps-distance-panel.show { display: block; }
+  .gps-panel-row.show { display: flex; }
   .gps-distance-value { font-size: 15px; font-weight: 700; color: var(--terracotta); line-height: 1.2; }
   .gps-distance-name { font-size: 11.5px; color: var(--ink-soft); margin-top: 1px; }
+  .gps-spot-row .gps-distance-value { color: #3a6ea5; }
+  .gps-spot-clear {
+    flex: 0 0 auto; width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--gold);
+    background: rgba(255,255,255,0.6); color: var(--ink-soft); font-size: 12px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; padding: 0;
+  }
+  .gps-save-spot-btn {
+    display: none; align-items: center; gap: 6px; align-self: flex-start;
+    background: rgba(246, 238, 221, 0.95); border: 1px solid var(--gold); border-radius: 20px;
+    padding: 7px 13px 7px 10px; font-family: var(--sans); font-size: 12px; font-weight: 700;
+    color: var(--ink); cursor: pointer; box-shadow: 0 4px 14px rgba(90,67,39,0.25);
+  }
+  .gps-save-spot-btn.show { display: flex; }
+  .map-legend-icon-cafe, .map-legend-icon-souvenir {
+    background: transparent; border: none; font-size: 13px; width: 14px; height: 14px;
+  }
+  .saved-spot-marker { font-size: 26px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.45)); line-height: 1; }
+  .poi-marker {
+    width: 26px; height: 26px; border-radius: 50%; background: #fff; border: 2px solid var(--gold);
+    display: flex; align-items: center; justify-content: center; font-size: 13px;
+    box-shadow: 0 2px 6px rgba(90,67,39,0.35);
+  }
   .gps-user-halo {
     width: 22px; height: 22px; border-radius: 50%;
     background: rgba(181,96,46,0.35); display: flex; align-items: center; justify-content: center;
@@ -433,6 +460,41 @@
     0% { box-shadow: 0 0 0 0 rgba(181,96,46,0.5); }
     70% { box-shadow: 0 0 0 14px rgba(181,96,46,0); }
     100% { box-shadow: 0 0 0 0 rgba(181,96,46,0); }
+  }
+
+  /* === ПОМОЩНИК-ПОДСКАЗКА (ненавязчивый пузырь при признаках потерянности) === */
+  .help-bubble {
+    position: fixed; left: 14px; right: 14px; bottom: 74px; z-index: 1400;
+    background: var(--parchment); border: 1px solid var(--gold); border-radius: 16px;
+    box-shadow: 0 10px 28px rgba(90,67,39,0.35);
+    padding: 14px 14px 12px; font-family: var(--sans); color: var(--ink);
+    display: none; opacity: 0; transform: translateY(10px);
+    transition: opacity .35s ease, transform .35s ease;
+  }
+  .help-bubble.show { display: block; }
+  .help-bubble.visible { opacity: 1; transform: translateY(0); }
+  .help-bubble-row { display: flex; align-items: flex-start; gap: 10px; }
+  .help-bubble-icon { font-size: 20px; line-height: 1; margin-top: 1px; }
+  .help-bubble-text { flex: 1; font-size: 14px; font-weight: 600; line-height: 1.35; }
+  .help-bubble-close {
+    flex: 0 0 auto; width: 22px; height: 22px; border-radius: 50%; border: none;
+    background: rgba(90,67,39,0.1); color: var(--ink-soft); font-size: 12px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; padding: 0;
+  }
+  .help-bubble-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .help-bubble-btn {
+    flex: 1 1 auto; min-width: 40%; text-align: center;
+    background: linear-gradient(135deg, var(--terracotta), #8f4a22); color: #fff;
+    border: none; border-radius: 12px; padding: 9px 10px; font-family: var(--sans);
+    font-size: 12.5px; font-weight: 700; cursor: pointer;
+  }
+  .help-bubble-btn.secondary {
+    background: rgba(90,67,39,0.08); color: var(--ink); border: 1px solid var(--gold);
+  }
+  #tabs.help-pulse .tab { animation: helpTabPulse 1s ease-in-out 2; }
+  @keyframes helpTabPulse {
+    0%, 100% { box-shadow: none; }
+    50% { box-shadow: 0 0 0 2px var(--terracotta) inset; }
   }
 </style>
 </head>
@@ -480,6 +542,19 @@
     </div>
 
     <button class="premium-popup-close" id="premiumPopupClose">OK</button>
+  </div>
+</div>
+
+<!-- ПОМОЩНИК-ПОДСКАЗКА: появляется при признаках "потерянности" (частые метания между вкладками) -->
+<div class="help-bubble" id="helpBubble">
+  <div class="help-bubble-row">
+    <span class="help-bubble-icon">🧭</span>
+    <span class="help-bubble-text" id="helpBubbleText">Показать, что где находится?</span>
+    <button class="help-bubble-close" id="helpBubbleClose">✕</button>
+  </div>
+  <div class="help-bubble-actions">
+    <button class="help-bubble-btn" id="helpBubbleShow">Да, покажи</button>
+    <button class="help-bubble-btn secondary" id="helpBubbleDismiss">Нет, спасибо</button>
   </div>
 </div>
 
@@ -554,9 +629,21 @@
       <button class="gps-toggle-btn" id="gpsToggleBtn">
         <span class="lock-star">✦</span><span>📍</span><span id="gpsToggleLabel">GPS</span>
       </button>
-      <div class="gps-distance-panel" id="gpsDistancePanel">
-        <div class="gps-distance-value" id="gpsDistanceValue"></div>
-        <div class="gps-distance-name" id="gpsDistanceName"></div>
+      <div class="gps-panel" id="gpsPanel">
+        <div class="gps-panel-row" id="gpsDistancePanel">
+          <div class="gps-distance-value" id="gpsDistanceValue"></div>
+          <div class="gps-distance-name" id="gpsDistanceName"></div>
+        </div>
+        <div class="gps-panel-row gps-spot-row" id="gpsSpotRow">
+          <div style="flex:1; min-width:0;">
+            <div class="gps-distance-value" id="gpsSpotValue"></div>
+            <div class="gps-distance-name" id="gpsSpotName"></div>
+          </div>
+          <button class="gps-spot-clear" id="gpsSpotClear" title="Clear">✕</button>
+        </div>
+        <button class="gps-save-spot-btn" id="gpsSaveSpotBtn">
+          <span>📌</span><span id="gpsSaveSpotLabel">Save my spot</span>
+        </button>
       </div>
       <div class="map-legend" id="mapLegend">
         <div class="map-legend-row">
@@ -566,6 +653,14 @@
         <div class="map-legend-row">
           <div class="map-legend-dot"></div>
           <span id="legendTownLabel">Town walk</span>
+        </div>
+        <div class="map-legend-row" id="legendCafeRow" style="display:none;">
+          <div class="map-legend-icon map-legend-icon-cafe">☕</div>
+          <span id="legendCafeLabel">Cafe</span>
+        </div>
+        <div class="map-legend-row" id="legendSouvenirRow" style="display:none;">
+          <div class="map-legend-icon map-legend-icon-souvenir">🎁</div>
+          <span id="legendSouvenirLabel">Souvenirs</span>
         </div>
       </div>
       <div class="map-panel" id="mapPanel">
@@ -866,6 +961,32 @@ const castles = [
   }
 ];
 
+// Кафе и сувенирные магазины на карте — отдельная категория точек.
+// Формат одной записи (пришлите список в таком виде — вставлю):
+// { type: 'cafe' | 'souvenir', name: "...", nameRu: "...", lat: 50.xxxx, lng: 7.xxxx }
+const pois = [
+  // { type: 'cafe', name: "Café am Deutsches Eck", nameRu: "Кафе у Немецкого угла", lat: 50.3600, lng: 7.6010 },
+];
+
+function renderPois() {
+  if (!leafletMap) return;
+  const icons = { cafe: '☕', souvenir: '🎁' };
+  pois.forEach((p) => {
+    const icon = L.divIcon({
+      className: '', html: `<div class="poi-marker">${icons[p.type] || '•'}</div>`,
+      iconSize: [26, 26], iconAnchor: [13, 13]
+    });
+    const marker = L.marker([p.lat, p.lng], { icon, zIndexOffset: 400 }).addTo(leafletMap);
+    marker.bindTooltip(lang === 'ru' ? (p.nameRu || p.name) : p.name);
+  });
+  const hasCafe = pois.some((p) => p.type === 'cafe');
+  const hasSouvenir = pois.some((p) => p.type === 'souvenir');
+  const cafeRow = document.getElementById('legendCafeRow');
+  const souvenirRow = document.getElementById('legendSouvenirRow');
+  if (cafeRow) cafeRow.style.display = hasCafe ? 'flex' : 'none';
+  if (souvenirRow) souvenirRow.style.display = hasSouvenir ? 'flex' : 'none';
+}
+
 const routePlaces = [
   {
     title: "Koblenz — where two rivers meet", titleRu: "Кобленц — слияние двух рек",
@@ -1093,7 +1214,15 @@ const UI = {
     gpsLocating: 'Locating…',
     gpsError: 'Could not get your location. Check location permissions.',
     gpsDistanceTo: (name) => `to ${name}`,
-    gpsArrived: 'You are here'
+    gpsArrived: 'You are here',
+    gpsSaveSpot: 'Save my spot',
+    gpsSaveSpotPrompt: 'Label this spot (e.g. "Ship", "Bus"):',
+    gpsSaveSpotDefault: 'My spot',
+    gpsSpotTo: (name) => `${name} —`,
+    gpsSpotArrived: 'You are back',
+    legendCafe: 'Cafe', legendSouvenir: 'Souvenirs',
+    helpBubbleText: 'Would a quick guide help?',
+    helpBubbleShow: 'Yes, show me', helpBubbleDismiss: 'No, thanks'
   },
   ru: {
     tabs: ['Гид', 'Точки', 'Карта', 'Легенды', 'Инфо', 'Маршрут'],
@@ -1122,7 +1251,15 @@ const UI = {
     gpsLocating: 'Определяем…',
     gpsError: 'Не удалось определить местоположение. Проверьте разрешения геолокации.',
     gpsDistanceTo: (name) => `до «${name}»`,
-    gpsArrived: 'Вы на месте'
+    gpsArrived: 'Вы на месте',
+    gpsSaveSpot: 'Запомнить место',
+    gpsSaveSpotPrompt: 'Название места (например, «Корабль», «Автобус»):',
+    gpsSaveSpotDefault: 'Моё место',
+    gpsSpotTo: (name) => `${name} —`,
+    gpsSpotArrived: 'Вы на месте',
+    legendCafe: 'Кафе', legendSouvenir: 'Сувениры',
+    helpBubbleText: 'Показать, что где находится?',
+    helpBubbleShow: 'Да, покажи', helpBubbleDismiss: 'Нет, спасибо'
   }
 };
 
@@ -1145,6 +1282,7 @@ let gpsActive = false;
 let gpsWatchId = null;
 let gpsMarker = null;
 let gpsLastLat = null, gpsLastLng = null;
+let savedSpotMarker = null;
 
 function renderTabs() {
   const tabsEl = document.getElementById('tabs');
@@ -1179,7 +1317,110 @@ function switchView(viewName) {
       else leafletMap.invalidateSize();
     }, 50);
   }
+  trackNavForConfusion(viewName);
 }
+
+/* ============================================================
+   ПОМОЩНИК-ПОДСКАЗКА (пробная версия)
+   Ненавязчивый пузырь, который появляется, если поведение похоже
+   на "человек потерялся": частые метания между 1-2 вкладками
+   (pogo-sticking) или несколько быстрых тапов в одну область без
+   результата (rage click). Никакого backend/AI — простая эвристика
+   на клиенте. Показывается максимум 2 раза за сессию, с паузой.
+   ============================================================ */
+const HELP_MAX_SHOWS_PER_SESSION = 2;
+const HELP_COOLDOWN_MS = 45000;
+let navConfusionHistory = []; // {view, t}
+let clickConfusionHistory = []; // {x, y, t}
+let helpBubbleLastShown = 0;
+let helpBubbleMuted = false; // если человек явно закрыл — не докучаем в этой сессии
+
+function helpShownCount() {
+  try { return parseInt(sessionStorage.getItem('rhineGuideHelpShown') || '0', 10); } catch (e) { return 0; }
+}
+function helpBumpShownCount() {
+  try { sessionStorage.setItem('rhineGuideHelpShown', String(helpShownCount() + 1)); } catch (e) {}
+}
+
+function trackNavForConfusion(viewName) {
+  const now = Date.now();
+  navConfusionHistory.push({ view: viewName, t: now });
+  navConfusionHistory = navConfusionHistory.filter((e) => now - e.t < 20000).slice(-8);
+
+  if (navConfusionHistory.length >= 4) {
+    const recent = navConfusionHistory.slice(-4);
+    const distinctViews = new Set(recent.map((e) => e.view));
+    // 4+ переключения за 20 секунд между всего 1-2 разделами — похоже на "не находит то, что искал"
+    if (distinctViews.size <= 2) {
+      maybeShowHelpBubble('pogo');
+    }
+  }
+}
+
+function trackClickForConfusion(x, y) {
+  const now = Date.now();
+  clickConfusionHistory.push({ x, y, t: now });
+  clickConfusionHistory = clickConfusionHistory.filter((e) => now - e.t < 4000).slice(-6);
+
+  const cluster = clickConfusionHistory.filter((e) => now - e.t < 4000 && Math.abs(e.x - x) < 45 && Math.abs(e.y - y) < 45);
+  if (cluster.length >= 3) {
+    maybeShowHelpBubble('rage');
+  }
+}
+
+function maybeShowHelpBubble(reason) {
+  if (helpBubbleMuted) return;
+  if (helpShownCount() >= HELP_MAX_SHOWS_PER_SESSION) return;
+  const now = Date.now();
+  if (now - helpBubbleLastShown < HELP_COOLDOWN_MS) return;
+  helpBubbleLastShown = now;
+  navConfusionHistory = [];
+  clickConfusionHistory = [];
+  showHelpBubble();
+}
+
+function renderHelpBubbleText() {
+  document.getElementById('helpBubbleText').textContent = UI[lang].helpBubbleText;
+  document.getElementById('helpBubbleShow').textContent = UI[lang].helpBubbleShow;
+  document.getElementById('helpBubbleDismiss').textContent = UI[lang].helpBubbleDismiss;
+}
+
+function showHelpBubble() {
+  renderHelpBubbleText();
+  const el = document.getElementById('helpBubble');
+  el.classList.add('show');
+  requestAnimationFrame(() => el.classList.add('visible'));
+  helpBumpShownCount();
+}
+
+function hideHelpBubble() {
+  const el = document.getElementById('helpBubble');
+  el.classList.remove('visible');
+  setTimeout(() => el.classList.remove('show'), 350);
+}
+
+document.getElementById('helpBubbleClose').addEventListener('click', () => {
+  helpBubbleMuted = true;
+  hideHelpBubble();
+});
+document.getElementById('helpBubbleDismiss').addEventListener('click', () => {
+  helpBubbleMuted = true;
+  hideHelpBubble();
+});
+document.getElementById('helpBubbleShow').addEventListener('click', () => {
+  hideHelpBubble();
+  const tabsEl = document.getElementById('tabs');
+  tabsEl.scrollTo({ left: 0, behavior: 'smooth' });
+  tabsEl.classList.add('help-pulse');
+  setTimeout(() => tabsEl.classList.remove('help-pulse'), 2200);
+});
+
+document.addEventListener('click', (e) => {
+  // игнорируем клики по интерактивным элементам — нас интересуют клики "в никуда"
+  const interactive = e.target.closest('button, a, input, .tab, .tab-arrow, .castle-card, .route-hook, .help-bubble, [onclick]');
+  if (interactive) return;
+  trackClickForConfusion(e.clientX, e.clientY);
+}, true);
 
 // Делит текст на два примерно равных по длине куска (по границе слова),
 // для «расходящейся» двухколоночной вёрстки (обе половины тянутся к разделителю).
@@ -1270,6 +1511,10 @@ function applyStaticText() {
   const legendTownEl = document.getElementById('legendTownLabel');
   if (legendCastleEl) legendCastleEl.textContent = t.legendCastle;
   if (legendTownEl) legendTownEl.textContent = t.legendTown;
+  const legendCafeEl = document.getElementById('legendCafeLabel');
+  const legendSouvenirEl = document.getElementById('legendSouvenirLabel');
+  if (legendCafeEl) legendCafeEl.textContent = t.legendCafe;
+  if (legendSouvenirEl) legendSouvenirEl.textContent = t.legendSouvenir;
 
   const pTitle = document.getElementById('premiumPopupTitle');
   const pText = document.getElementById('premiumPopupText');
@@ -1514,6 +1759,18 @@ function initMap() {
     leafletMap.fitBounds(points, { paddingTopLeft: [24, 130], paddingBottomRight: [24, 24] });
   }
 
+  renderPois();
+
+  const savedSpot = getSavedSpot();
+  if (savedSpot) {
+    const spotIcon = L.divIcon({
+      className: '', html: `<div class="saved-spot-marker">📌</div>`,
+      iconSize: [30, 30], iconAnchor: [15, 28]
+    });
+    savedSpotMarker = L.marker([savedSpot.lat, savedSpot.lng], { icon: spotIcon, zIndexOffset: 900 }).addTo(leafletMap);
+    savedSpotMarker.bindTooltip(savedSpot.label);
+  }
+
   document.getElementById('mapPanelClose').onclick = () => {
     document.getElementById('mapPanel').classList.remove('open');
     selectedIndex = -1;
@@ -1588,6 +1845,7 @@ function setLang(newLang) {
   renderLegendsList();
   renderRouteList();
   renderInfo();
+  if (document.getElementById('helpBubble').classList.contains('show')) renderHelpBubbleText();
 }
 
 document.querySelectorAll('.pill-btn[data-lang]').forEach(btn => {
@@ -1781,34 +2039,101 @@ function distanceMeters(lat1, lng1, lat2, lng2) {
 const GPS_DISTANCE_VISIBLE_M = 2000;
 const GPS_ARRIVED_M = 60;
 
-function updateGpsDistancePanel(lat, lng) {
-  const panel = document.getElementById('gpsDistancePanel');
-  if (!panel) return;
+// Направление (сторона света) от точки 1 к точке 2
+function bearingCompass(lat1, lng1, lat2, lng2) {
+  const toRad = (d) => d * Math.PI / 180, toDeg = (r) => r * 180 / Math.PI;
+  const y = Math.sin(toRad(lng2 - lng1)) * Math.cos(toRad(lat2));
+  const x = Math.cos(toRad(lat1)) * Math.sin(toRad(lat2)) -
+    Math.sin(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.cos(toRad(lng2 - lng1));
+  const deg = (toDeg(Math.atan2(y, x)) + 360) % 360;
+  const dirs = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+  return dirs[Math.round(deg / 45) % 8];
+}
 
-  // Если открыта карточка конкретного замка на карте — считаем расстояние до него
-  // (без ограничения в 2 км, человек сам выбрал цель и хочет знать, сколько до неё).
-  // Иначе — до ближайшего замка, и только если он рядом (иначе цифра бесполезна).
+function formatDistance(d) {
+  return d < 1000 ? `≈ ${Math.round(d / 10) * 10} m` : `≈ ${(d / 1000).toFixed(1)} km`;
+}
+
+const SAVED_SPOT_KEY = 'rhineGuideSavedSpot';
+function getSavedSpot() {
+  try { return JSON.parse(localStorage.getItem(SAVED_SPOT_KEY) || 'null'); } catch (e) { return null; }
+}
+function setSavedSpot(spot) {
+  try { localStorage.setItem(SAVED_SPOT_KEY, JSON.stringify(spot)); } catch (e) {}
+}
+function clearSavedSpot() {
+  try { localStorage.removeItem(SAVED_SPOT_KEY); } catch (e) {}
+}
+
+function updateGpsDistancePanel(lat, lng) {
+  const gpsPanel = document.getElementById('gpsPanel');
+  const castleRow = document.getElementById('gpsDistancePanel');
+  const spotRow = document.getElementById('gpsSpotRow');
+  const saveBtn = document.getElementById('gpsSaveSpotBtn');
+  if (!gpsPanel) return;
+  const t = UI[lang];
+
+  // --- Ближайший/выбранный замок ---
   const useSelected = selectedIndex >= 0 && typeof castles[selectedIndex]?.lat === 'number';
   const targetIndex = useSelected ? selectedIndex : findNearestCastleIndex(lat, lng);
-  if (targetIndex < 0) { panel.classList.remove('show'); return; }
-  const c = castles[targetIndex];
-  const d = distanceMeters(lat, lng, c.lat, c.lng);
-  if (!useSelected && d > GPS_DISTANCE_VISIBLE_M) { panel.classList.remove('show'); return; }
-
-  const t = UI[lang];
-  const valueEl = document.getElementById('gpsDistanceValue');
-  const nameEl = document.getElementById('gpsDistanceName');
-  if (d <= GPS_ARRIVED_M) {
-    valueEl.textContent = t.gpsArrived;
-    nameEl.textContent = c.name;
-  } else if (d < 1000) {
-    valueEl.textContent = `≈ ${Math.round(d / 10) * 10} m`;
-    nameEl.textContent = t.gpsDistanceTo(c.name);
+  if (targetIndex >= 0) {
+    const c = castles[targetIndex];
+    const d = distanceMeters(lat, lng, c.lat, c.lng);
+    if (useSelected || d <= GPS_DISTANCE_VISIBLE_M) {
+      const valueEl = document.getElementById('gpsDistanceValue');
+      const nameEl = document.getElementById('gpsDistanceName');
+      if (d <= GPS_ARRIVED_M) {
+        valueEl.textContent = t.gpsArrived;
+        nameEl.textContent = c.name;
+      } else {
+        valueEl.textContent = formatDistance(d);
+        nameEl.textContent = t.gpsDistanceTo(c.name);
+      }
+      castleRow.classList.add('show');
+    } else {
+      castleRow.classList.remove('show');
+    }
   } else {
-    valueEl.textContent = `≈ ${(d / 1000).toFixed(1)} km`;
-    nameEl.textContent = t.gpsDistanceTo(c.name);
+    castleRow.classList.remove('show');
   }
-  panel.classList.add('show');
+
+  // --- Сохранённая точка (корабль/автобус/машина) ---
+  const spot = getSavedSpot();
+  if (spot) {
+    const d = distanceMeters(lat, lng, spot.lat, spot.lng);
+    const valueEl = document.getElementById('gpsSpotValue');
+    const nameEl = document.getElementById('gpsSpotName');
+    if (d <= GPS_ARRIVED_M) {
+      valueEl.textContent = t.gpsSpotArrived;
+      nameEl.textContent = spot.label;
+    } else {
+      const dir = bearingCompass(lat, lng, spot.lat, spot.lng);
+      valueEl.textContent = `${formatDistance(d)} ${dir}`;
+      nameEl.textContent = t.gpsSpotTo(spot.label);
+    }
+    spotRow.classList.add('show');
+    saveBtn.classList.remove('show');
+
+    if (leafletMap) {
+      const spotIcon = L.divIcon({
+        className: '', html: `<div class="saved-spot-marker">📌</div>`,
+        iconSize: [30, 30], iconAnchor: [15, 28]
+      });
+      if (savedSpotMarker) {
+        savedSpotMarker.setLatLng([spot.lat, spot.lng]);
+      } else {
+        savedSpotMarker = L.marker([spot.lat, spot.lng], { icon: spotIcon, zIndexOffset: 900 }).addTo(leafletMap);
+      }
+      savedSpotMarker.bindTooltip(spot.label);
+    }
+  } else {
+    spotRow.classList.remove('show');
+    saveBtn.classList.add('show');
+    document.getElementById('gpsSaveSpotLabel').textContent = t.gpsSaveSpot;
+    if (savedSpotMarker && leafletMap) { leafletMap.removeLayer(savedSpotMarker); savedSpotMarker = null; }
+  }
+
+  gpsPanel.classList.add('show');
 }
 
 function stopGps() {
@@ -1820,7 +2145,7 @@ function stopGps() {
   if (gpsMarker && leafletMap) { leafletMap.removeLayer(gpsMarker); gpsMarker = null; }
   gpsToggleBtn.classList.remove('active');
   gpsToggleLabel.textContent = UI[lang].gpsToggle;
-  const panel = document.getElementById('gpsDistancePanel');
+  const panel = document.getElementById('gpsPanel');
   if (panel) panel.classList.remove('show');
 }
 
@@ -1875,6 +2200,28 @@ if (gpsToggleBtn) {
     e.stopPropagation();
     if (isPremiumUnlocked()) toggleGps();
     else openPremiumPopup('gps');
+  });
+}
+
+const gpsSaveSpotBtn = document.getElementById('gpsSaveSpotBtn');
+if (gpsSaveSpotBtn) {
+  gpsSaveSpotBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (!gpsActive || gpsLastLat === null) return;
+    const t = UI[lang];
+    const label = window.prompt(t.gpsSaveSpotPrompt, t.gpsSaveSpotDefault);
+    if (label === null) return; // отменил
+    setSavedSpot({ lat: gpsLastLat, lng: gpsLastLng, label: (label || t.gpsSaveSpotDefault).trim() });
+    updateGpsDistancePanel(gpsLastLat, gpsLastLng);
+  });
+}
+
+const gpsSpotClearBtn = document.getElementById('gpsSpotClear');
+if (gpsSpotClearBtn) {
+  gpsSpotClearBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    clearSavedSpot();
+    if (gpsActive && gpsLastLat !== null) updateGpsDistancePanel(gpsLastLat, gpsLastLng);
   });
 }
 if (premiumCodeInput) {
