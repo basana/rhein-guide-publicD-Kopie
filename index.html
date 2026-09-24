@@ -306,6 +306,15 @@
   }
   .splash-lang-btn.active { background: var(--terracotta); color: var(--cream-text); border-color: var(--terracotta); }
 
+  /* === ЗНАЧОК «ЭКСКУРСИЯ ВОЗМОЖНА» (там, где гид сам проводит туры) === */
+  .tour-badge {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: rgba(181,96,46,0.10); border: 1px solid var(--terracotta); border-radius: 20px;
+    padding: 6px 13px; font-family: var(--sans); font-size: 12.5px; font-weight: 600;
+    color: var(--terracotta); margin: 0 0 14px; line-height: 1.35;
+  }
+  .tour-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--terracotta); flex: 0 0 6px; }
+
   /* === PREMIUM-ЗНАЧОК НА ФОТО СТАНЦИИ === */
   .premium-badge {
     position: absolute; bottom: 10px; right: 10px; z-index: 10;
@@ -402,6 +411,15 @@
   .gps-toggle-btn.active { background: linear-gradient(135deg, var(--terracotta), #8f4a22); color: #fff; border-color: rgba(255,255,255,0.75); }
   .gps-toggle-btn .lock-star { font-size: 11px; color: var(--terracotta); }
   .gps-toggle-btn.active .lock-star { display: none; }
+  .gps-distance-panel {
+    position: absolute; z-index: 1000; top: 126px; left: 12px; display: none;
+    background: rgba(246, 238, 221, 0.95); border: 1px solid var(--gold); border-radius: 12px;
+    padding: 8px 12px; font-family: var(--sans); color: var(--ink);
+    box-shadow: 0 4px 14px rgba(90,67,39,0.25); max-width: 200px;
+  }
+  .gps-distance-panel.show { display: block; }
+  .gps-distance-value { font-size: 15px; font-weight: 700; color: var(--terracotta); line-height: 1.2; }
+  .gps-distance-name { font-size: 11.5px; color: var(--ink-soft); margin-top: 1px; }
   .gps-user-halo {
     width: 22px; height: 22px; border-radius: 50%;
     background: rgba(181,96,46,0.35); display: flex; align-items: center; justify-content: center;
@@ -503,6 +521,8 @@
         <div class="stat"><p id="statBuiltLabel"></p><p id="statBuilt"></p></div>
       </div>
 
+      <div class="tour-badge" id="tourBadge" style="display:none;"><span class="dot"></span><span id="tourBadgeText"></span></div>
+
       <div class="story-block">
         <h4 id="storyTitle"></h4>
         <div class="split-text" id="stationFactsSplit">
@@ -534,6 +554,10 @@
       <button class="gps-toggle-btn" id="gpsToggleBtn">
         <span class="lock-star">✦</span><span>📍</span><span id="gpsToggleLabel">GPS</span>
       </button>
+      <div class="gps-distance-panel" id="gpsDistancePanel">
+        <div class="gps-distance-value" id="gpsDistanceValue"></div>
+        <div class="gps-distance-name" id="gpsDistanceName"></div>
+      </div>
       <div class="map-legend" id="mapLegend">
         <div class="map-legend-row">
           <div class="map-legend-icon"><img src="new-vector-castle.png" alt=""></div>
@@ -643,7 +667,9 @@ const castles = [
     legend: "It only got the name 'Marksburg' much later, in the 1400s, when a chapel to Saint Mark was added. Before that, people just called it the castle of Braubach.",
     legendRu: "Название «Марксбург» он получил намного позже, в XV веке, когда добавили часовню святого Марка. До этого его просто называли замком Браубаха.",
     say: "The ultimate intact medieval fortress perched high above Braubach.",
-    sayRu: "Единственная уцелевшая средневековая крепость над Браубахом."
+    sayRu: "Единственная уцелевшая средневековая крепость над Браубахом.",
+    tourNote: "Private guided tours available here — stay as long as you like, apart from the general group.",
+    tourNoteRu: "Здесь возможна частная экскурсия с гидом — вы остаётесь столько, сколько захотите, отдельно от общей группы."
   },
   {
     id: "braubach", lat: 50.2735, lng: 7.6480,
@@ -1065,7 +1091,9 @@ const UI = {
     premiumTextGps: 'Let the app sense where you are and open the right station automatically — no scrolling or searching. Available in the bonus edition.',
     gpsToggle: 'GPS', gpsOn: 'GPS ON',
     gpsLocating: 'Locating…',
-    gpsError: 'Could not get your location. Check location permissions.'
+    gpsError: 'Could not get your location. Check location permissions.',
+    gpsDistanceTo: (name) => `to ${name}`,
+    gpsArrived: 'You are here'
   },
   ru: {
     tabs: ['Гид', 'Точки', 'Карта', 'Легенды', 'Инфо', 'Маршрут'],
@@ -1092,7 +1120,9 @@ const UI = {
     premiumTextGps: 'Пусть приложение само определит, где вы находитесь, и откроет нужную станцию — без пролистывания и поиска. Доступно в бонусной версии.',
     gpsToggle: 'GPS', gpsOn: 'GPS ВКЛ',
     gpsLocating: 'Определяем…',
-    gpsError: 'Не удалось определить местоположение. Проверьте разрешения геолокации.'
+    gpsError: 'Не удалось определить местоположение. Проверьте разрешения геолокации.',
+    gpsDistanceTo: (name) => `до «${name}»`,
+    gpsArrived: 'Вы на месте'
   }
 };
 
@@ -1190,6 +1220,17 @@ function renderGuide() {
   document.getElementById('statTown').textContent = s.town;
   document.getElementById('statBuiltLabel').textContent = t.built;
   document.getElementById('statBuilt').textContent = lang === 'ru' ? s.builtRu : s.built;
+
+  const tourBadge = document.getElementById('tourBadge');
+  const tourNote = lang === 'ru' ? s.tourNoteRu : s.tourNote;
+  if (tourBadge) {
+    if (tourNote) {
+      tourBadge.style.display = 'inline-flex';
+      document.getElementById('tourBadgeText').textContent = tourNote;
+    } else {
+      tourBadge.style.display = 'none';
+    }
+  }
 
   document.getElementById('storyTitle').textContent = t.story;
   setSplitText('stationFactsA', 'stationFactsB', lang === 'ru' ? s.factsRu : s.facts);
@@ -1721,6 +1762,47 @@ function findNearestCastleIndex(lat, lng) {
   return best;
 }
 
+// Расстояние по прямой в метрах (формула гаверсинуса)
+function distanceMeters(lat1, lng1, lat2, lng2) {
+  const R = 6371000;
+  const toRad = (d) => d * Math.PI / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a = Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+// Панель с расстоянием видна только на подходе к замку (как в исходной версии) —
+// дальше этого порога она просто скрыта, а не показывает бессмысленные десятки км.
+const GPS_DISTANCE_VISIBLE_M = 3000;
+const GPS_ARRIVED_M = 60;
+
+function updateGpsDistancePanel(lat, lng) {
+  const panel = document.getElementById('gpsDistancePanel');
+  if (!panel) return;
+  const nearest = findNearestCastleIndex(lat, lng);
+  if (nearest < 0) { panel.classList.remove('show'); return; }
+  const c = castles[nearest];
+  const d = distanceMeters(lat, lng, c.lat, c.lng);
+  if (d > GPS_DISTANCE_VISIBLE_M) { panel.classList.remove('show'); return; }
+
+  const t = UI[lang];
+  const valueEl = document.getElementById('gpsDistanceValue');
+  const nameEl = document.getElementById('gpsDistanceName');
+  if (d <= GPS_ARRIVED_M) {
+    valueEl.textContent = t.gpsArrived;
+    nameEl.textContent = c.name;
+  } else if (d < 1000) {
+    valueEl.textContent = `≈ ${Math.round(d / 10) * 10} m`;
+    nameEl.textContent = t.gpsDistanceTo(c.name);
+  } else {
+    valueEl.textContent = `≈ ${(d / 1000).toFixed(1)} km`;
+    nameEl.textContent = t.gpsDistanceTo(c.name);
+  }
+  panel.classList.add('show');
+}
+
 function stopGps() {
   gpsActive = false;
   if (gpsWatchId !== null && navigator.geolocation) {
@@ -1730,6 +1812,8 @@ function stopGps() {
   if (gpsMarker && leafletMap) { leafletMap.removeLayer(gpsMarker); gpsMarker = null; }
   gpsToggleBtn.classList.remove('active');
   gpsToggleLabel.textContent = UI[lang].gpsToggle;
+  const panel = document.getElementById('gpsDistancePanel');
+  if (panel) panel.classList.remove('show');
 }
 
 function startGps() {
@@ -1755,6 +1839,8 @@ function startGps() {
         gpsMarker = L.marker([latitude, longitude], { icon: haloIcon, zIndexOffset: 1000 }).addTo(leafletMap);
       }
       if (leafletMap) leafletMap.panTo([latitude, longitude]);
+
+      updateGpsDistancePanel(latitude, longitude);
 
       const nearest = findNearestCastleIndex(latitude, longitude);
       if (nearest >= 0 && nearest !== index) {
