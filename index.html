@@ -66,8 +66,9 @@
 
   .pill-btn {
     background: var(--parchment-deep); border: 1px solid var(--gold);
-    color: var(--ink-soft); border-radius: 8px; font-size: 12px;
-    padding: 5px 9px; line-height: 1; cursor: pointer; font-weight: 600;
+    color: var(--ink-soft); border-radius: 8px; font-size: 13px;
+    padding: 8px 11px; line-height: 1; cursor: pointer; font-weight: 600;
+    min-width: 32px; min-height: 32px; display: inline-flex; align-items: center; justify-content: center;
   }
   .pill-btn.active { background: var(--terracotta); color: var(--cream-text); border-color: var(--terracotta); }
 
@@ -110,7 +111,7 @@
   .tabs::-webkit-scrollbar { display: none; }
 
   .tab {
-    flex-shrink: 0; font-size: 12px; padding: 6px 14px; border-radius: 20px;
+    flex-shrink: 0; font-size: calc(12px * var(--scale)); padding: 7px 15px; border-radius: 20px;
     color: var(--ink-soft); white-space: nowrap; cursor: pointer; border: 1px solid var(--gold);
     background: var(--parchment);
   }
@@ -426,6 +427,8 @@
   .gps-distance-value { font-size: 15px; font-weight: 700; color: var(--terracotta); line-height: 1.2; }
   .gps-distance-name { font-size: 11.5px; color: var(--ink-soft); margin-top: 1px; }
   .gps-spot-row .gps-distance-value { color: #3a6ea5; }
+  .gps-route-row { padding: 6px 12px; opacity: 0.9; }
+  .gps-route-text { font-size: 11.5px; font-weight: 600; color: var(--ink-soft); line-height: 1.3; }
   .gps-spot-clear {
     flex: 0 0 auto; width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--gold);
     background: rgba(255,255,255,0.6); color: var(--ink-soft); font-size: 12px; cursor: pointer;
@@ -463,38 +466,64 @@
   }
 
   /* === ПОМОЩНИК-ПОДСКАЗКА (ненавязчивый пузырь при признаках потерянности) === */
-  .help-bubble {
-    position: fixed; left: 14px; right: 14px; bottom: 74px; z-index: 1400;
-    background: var(--parchment); border: 1px solid var(--gold); border-radius: 16px;
-    box-shadow: 0 10px 28px rgba(90,67,39,0.35);
-    padding: 14px 14px 12px; font-family: var(--sans); color: var(--ink);
-    display: none; opacity: 0; transform: translateY(10px);
-    transition: opacity .35s ease, transform .35s ease;
+  /* Затемняющая подложка — сигнализирует, что подсказка требует внимания
+     ПРЯМО СЕЙЧАС, а не просто ещё один элемент интерфейса внизу экрана.
+     Клики сквозь неё не проходят на подложку (pointer-events:none), закрыть
+     можно только явной кнопкой — чтобы пожилой пользователь не промахнулся. */
+  .help-bubble-backdrop {
+    position: fixed; inset: 0; z-index: 1390; background: rgba(20,14,6,0.38);
+    display: none; opacity: 0; transition: opacity .35s ease; pointer-events: none;
   }
+  .help-bubble-backdrop.show { display: block; }
+  .help-bubble-backdrop.visible { opacity: 1; }
+
+  .help-bubble {
+    position: fixed; left: 16px; right: 16px; top: 42%; transform: translateY(-50%) scale(0.96);
+    z-index: 1400;
+    background: var(--parchment); border: 1px solid var(--gold); border-radius: 18px;
+    border-left: 6px solid #3a6ea5;
+    box-shadow: 0 14px 36px rgba(20,14,6,0.45);
+    padding: 18px 18px 16px; font-family: var(--sans); color: var(--ink);
+    display: none; opacity: 0;
+    transition: opacity .35s ease, transform .35s ease, border-left-color .2s ease;
+  }
+  /* Синяя полоса+иконка компаса = «подсказка по меню»; терракотовая+замочек = «премиум/GPS».
+     Одно и то же оформление всплывающих подсказок иначе выглядело бы одинаково, а по смыслу это разные вещи. */
+  .help-bubble.mode-gps { border-left-color: var(--terracotta); }
   .help-bubble.show { display: block; }
-  .help-bubble.visible { opacity: 1; transform: translateY(0); }
-  .help-bubble-row { display: flex; align-items: flex-start; gap: 10px; }
-  .help-bubble-icon { font-size: 20px; line-height: 1; margin-top: 1px; }
-  .help-bubble-text { flex: 1; font-size: 14px; font-weight: 600; line-height: 1.35; }
+  .help-bubble.visible { opacity: 1; transform: translateY(-50%) scale(1); }
+  .help-bubble-row { display: flex; align-items: flex-start; gap: 12px; }
+  .help-bubble-icon { font-size: 26px; line-height: 1; margin-top: 1px; }
+  .help-bubble-text { flex: 1; font-size: 16.5px; font-weight: 700; line-height: 1.4; }
   .help-bubble-close {
-    flex: 0 0 auto; width: 22px; height: 22px; border-radius: 50%; border: none;
-    background: rgba(90,67,39,0.1); color: var(--ink-soft); font-size: 12px; cursor: pointer;
+    flex: 0 0 auto; width: 26px; height: 26px; border-radius: 50%; border: none;
+    background: rgba(90,67,39,0.12); color: var(--ink-soft); font-size: 13px; cursor: pointer;
     display: flex; align-items: center; justify-content: center; padding: 0;
   }
-  .help-bubble-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .help-bubble-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
   .help-bubble-btn {
     flex: 1 1 auto; min-width: 40%; text-align: center;
     background: linear-gradient(135deg, var(--terracotta), #8f4a22); color: #fff;
-    border: none; border-radius: 12px; padding: 9px 10px; font-family: var(--sans);
-    font-size: 12.5px; font-weight: 700; cursor: pointer;
+    border: none; border-radius: 12px; padding: 12px 10px; font-family: var(--sans);
+    font-size: 14px; font-weight: 700; cursor: pointer;
   }
   .help-bubble-btn.secondary {
     background: rgba(90,67,39,0.08); color: var(--ink); border: 1px solid var(--gold);
   }
-  #tabs.help-pulse .tab { animation: helpTabPulse 1s ease-in-out 2; }
-  @keyframes helpTabPulse {
-    0%, 100% { box-shadow: none; }
-    50% { box-shadow: 0 0 0 2px var(--terracotta) inset; }
+  /* Пункты меню подсвечиваются ПО ОЧЕРЕДИ (не все разом) — светлое кольцо
+     разгорается в насыщенно-синее и гаснет, каждый пункт по несколько секунд,
+     чтобы взгляд успевал переходить от одного к другому. Цвет — тот же синий,
+     что и у пузыря-подсказки, отдельный от терракотового «активного» состояния. */
+  .tab.help-wave {
+    animation-name: helpTabWave;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: both;
+  }
+  @keyframes helpTabWave {
+    0% { border-color: var(--gold); box-shadow: none; }
+    45% { border-color: #6f9bc4; box-shadow: 0 0 0 2px #6f9bc4, 0 0 8px 2px rgba(58,110,165,0.35); }
+    75% { border-color: #3a6ea5; box-shadow: 0 0 0 3px #3a6ea5, 0 0 14px 3px rgba(58,110,165,0.65); }
+    100% { border-color: var(--gold); box-shadow: none; }
   }
 </style>
 </head>
@@ -546,9 +575,10 @@
 </div>
 
 <!-- ПОМОЩНИК-ПОДСКАЗКА: появляется при признаках "потерянности" (частые метания между вкладками) -->
+<div class="help-bubble-backdrop" id="helpBubbleBackdrop"></div>
 <div class="help-bubble" id="helpBubble">
   <div class="help-bubble-row">
-    <span class="help-bubble-icon">🧭</span>
+    <span class="help-bubble-icon" id="helpBubbleIcon">🧭</span>
     <span class="help-bubble-text" id="helpBubbleText">Показать, что где находится?</span>
     <button class="help-bubble-close" id="helpBubbleClose">✕</button>
   </div>
@@ -630,6 +660,9 @@
         <span class="lock-star">✦</span><span>📍</span><span id="gpsToggleLabel">GPS</span>
       </button>
       <div class="gps-panel" id="gpsPanel">
+        <div class="gps-panel-row gps-route-row" id="gpsRouteRow">
+          <div class="gps-route-text" id="gpsRouteText"></div>
+        </div>
         <div class="gps-panel-row" id="gpsDistancePanel">
           <div class="gps-distance-value" id="gpsDistanceValue"></div>
           <div class="gps-distance-name" id="gpsDistanceName"></div>
@@ -1221,8 +1254,11 @@ const UI = {
     gpsSpotTo: (name) => `${name} —`,
     gpsSpotArrived: 'You are back',
     legendCafe: 'Cafe', legendSouvenir: 'Souvenirs',
-    helpBubbleText: 'Would a quick guide help?',
-    helpBubbleShow: 'Yes, show me', helpBubbleDismiss: 'No, thanks'
+    gpsRouteNear: (name, dist) => `${dist} to the nearest stop — ${name}`,
+    helpBubbleText: "Can't find what you're looking for? Let me show you the menu.",
+    helpBubbleShow: 'Show the menu', helpBubbleDismiss: 'No, thanks',
+    helpBubbleTextGps: 'Live GPS distance to the nearest castle is part of the bonus edition.',
+    helpBubbleShowGps: 'Learn more'
   },
   ru: {
     tabs: ['Гид', 'Точки', 'Карта', 'Легенды', 'Инфо', 'Маршрут'],
@@ -1258,8 +1294,11 @@ const UI = {
     gpsSpotTo: (name) => `${name} —`,
     gpsSpotArrived: 'Вы на месте',
     legendCafe: 'Кафе', legendSouvenir: 'Сувениры',
-    helpBubbleText: 'Показать, что где находится?',
-    helpBubbleShow: 'Да, покажи', helpBubbleDismiss: 'Нет, спасибо'
+    gpsRouteNear: (name, dist) => `${dist} до ближайшей точки маршрута — ${name}`,
+    helpBubbleText: 'Не находите нужный раздел? Покажу, что есть в меню.',
+    helpBubbleShow: 'Показать меню', helpBubbleDismiss: 'Нет, спасибо',
+    helpBubbleTextGps: 'GPS и расстояние до ближайшего замка доступны в бонусной версии.',
+    helpBubbleShowGps: 'Узнать больше'
   }
 };
 
@@ -1328,18 +1367,18 @@ function switchView(viewName) {
    результата (rage click). Никакого backend/AI — простая эвристика
    на клиенте. Показывается максимум 2 раза за сессию, с паузой.
    ============================================================ */
-const HELP_MAX_SHOWS_PER_SESSION = 2;
-const HELP_COOLDOWN_MS = 45000;
+const HELP_MAX_SHOWS_PER_SESSION = 2; // отдельно для каждого режима (orient / gps)
+const HELP_COOLDOWN_MS = 45000; // отдельно для каждого режима
 let navConfusionHistory = []; // {view, t}
 let clickConfusionHistory = []; // {x, y, t}
-let helpBubbleLastShown = 0;
-let helpBubbleMuted = false; // если человек явно закрыл — не докучаем в этой сессии
+let helpBubbleLastShownByMode = { orient: 0, gps: 0 };
+let helpBubbleMuted = { orient: false, gps: false }; // если человек явно закрыл — не докучаем этим ТИПОМ подсказки в этой сессии
 
-function helpShownCount() {
-  try { return parseInt(sessionStorage.getItem('rhineGuideHelpShown') || '0', 10); } catch (e) { return 0; }
+function helpShownCount(mode) {
+  try { return parseInt(sessionStorage.getItem('rhineGuideHelpShown_' + mode) || '0', 10); } catch (e) { return 0; }
 }
-function helpBumpShownCount() {
-  try { sessionStorage.setItem('rhineGuideHelpShown', String(helpShownCount() + 1)); } catch (e) {}
+function helpBumpShownCount(mode) {
+  try { sessionStorage.setItem('rhineGuideHelpShown_' + mode, String(helpShownCount(mode) + 1)); } catch (e) {}
 }
 
 function trackNavForConfusion(viewName) {
@@ -1353,7 +1392,13 @@ function trackNavForConfusion(viewName) {
     // 4+ переключения за 20 секунд между всего 1-2 разделами — похоже на "не находит то, что искал"
     if (distinctViews.size <= 2) {
       maybeShowHelpBubble('pogo');
+      return;
     }
+  }
+  // 5+ переключений за 20 секунд вообще, по любым разделам (не только между 1-2) —
+  // общая хаотичность, человек явно что-то ищет и не находит
+  if (navConfusionHistory.length >= 5) {
+    maybeShowHelpBubble('chaotic');
   }
 }
 
@@ -1369,51 +1414,98 @@ function trackClickForConfusion(x, y) {
 }
 
 function maybeShowHelpBubble(reason) {
-  if (helpBubbleMuted) return;
-  if (helpShownCount() >= HELP_MAX_SHOWS_PER_SESSION) return;
+  // Если человек "мечется"/тапает мимо именно на вкладке Карты и ещё не купил
+  // премиум — скорее всего он ищет GPS/расстояние до замка. В этом случае
+  // подсказка ведёт сразу к разблокировке, а не к общей ориентации.
+  const gpsContext = currentView === 'map' && typeof isPremiumUnlocked === 'function' && !isPremiumUnlocked();
+  const mode = gpsContext ? 'gps' : 'orient';
+
+  // У каждого режима подсказки — свой независимый лимит показов и своя пауза,
+  // чтобы срабатывание одной не "съедало" бюджет другой (это и была причина
+  // бага: подсказка про меню использовала общий лимит и глушила GPS-подсказку).
+  if (helpBubbleMuted[mode]) return;
+  if (helpShownCount(mode) >= HELP_MAX_SHOWS_PER_SESSION) return;
   const now = Date.now();
-  if (now - helpBubbleLastShown < HELP_COOLDOWN_MS) return;
-  helpBubbleLastShown = now;
+  if (now - (helpBubbleLastShownByMode[mode] || 0) < HELP_COOLDOWN_MS) return;
+  helpBubbleLastShownByMode[mode] = now;
   navConfusionHistory = [];
   clickConfusionHistory = [];
-  showHelpBubble();
+  showHelpBubble(mode);
 }
 
-function renderHelpBubbleText() {
-  document.getElementById('helpBubbleText').textContent = UI[lang].helpBubbleText;
-  document.getElementById('helpBubbleShow').textContent = UI[lang].helpBubbleShow;
-  document.getElementById('helpBubbleDismiss').textContent = UI[lang].helpBubbleDismiss;
-}
-
-function showHelpBubble() {
-  renderHelpBubbleText();
+function renderHelpBubbleText(mode) {
   const el = document.getElementById('helpBubble');
+  const m = mode || el.dataset.mode || 'orient';
+  const textKey = m === 'gps' ? 'helpBubbleTextGps' : 'helpBubbleText';
+  const showKey = m === 'gps' ? 'helpBubbleShowGps' : 'helpBubbleShow';
+  document.getElementById('helpBubbleText').textContent = UI[lang][textKey];
+  document.getElementById('helpBubbleShow').textContent = UI[lang][showKey];
+  document.getElementById('helpBubbleDismiss').textContent = UI[lang].helpBubbleDismiss;
+  document.getElementById('helpBubbleIcon').textContent = m === 'gps' ? '🔓' : '🧭';
+  el.classList.toggle('mode-gps', m === 'gps');
+}
+
+function showHelpBubble(mode) {
+  const el = document.getElementById('helpBubble');
+  const backdrop = document.getElementById('helpBubbleBackdrop');
+  el.dataset.mode = mode || 'orient';
+  renderHelpBubbleText(el.dataset.mode);
   el.classList.add('show');
-  requestAnimationFrame(() => el.classList.add('visible'));
-  helpBumpShownCount();
+  if (backdrop) backdrop.classList.add('show');
+  requestAnimationFrame(() => {
+    el.classList.add('visible');
+    if (backdrop) backdrop.classList.add('visible');
+  });
+  helpBumpShownCount(el.dataset.mode);
 }
 
 function hideHelpBubble() {
   const el = document.getElementById('helpBubble');
+  const backdrop = document.getElementById('helpBubbleBackdrop');
   el.classList.remove('visible');
-  setTimeout(() => el.classList.remove('show'), 350);
+  if (backdrop) backdrop.classList.remove('visible');
+  setTimeout(() => {
+    el.classList.remove('show');
+    if (backdrop) backdrop.classList.remove('show');
+  }, 350);
 }
 
 document.getElementById('helpBubbleClose').addEventListener('click', () => {
-  helpBubbleMuted = true;
+  helpBubbleMuted[document.getElementById('helpBubble').dataset.mode || 'orient'] = true;
   hideHelpBubble();
 });
 document.getElementById('helpBubbleDismiss').addEventListener('click', () => {
-  helpBubbleMuted = true;
+  helpBubbleMuted[document.getElementById('helpBubble').dataset.mode || 'orient'] = true;
   hideHelpBubble();
 });
 document.getElementById('helpBubbleShow').addEventListener('click', () => {
+  const mode = document.getElementById('helpBubble').dataset.mode || 'orient';
   hideHelpBubble();
+  if (mode === 'gps') {
+    openPremiumPopup('gps');
+    return;
+  }
   const tabsEl = document.getElementById('tabs');
   tabsEl.scrollTo({ left: 0, behavior: 'smooth' });
-  tabsEl.classList.add('help-pulse');
-  setTimeout(() => tabsEl.classList.remove('help-pulse'), 2200);
+  setTimeout(() => pulseTabsSequentially(), 350);
 });
+
+// Подсвечивает пункты меню один за другим (светлое → тёмно-синее → гаснет),
+// чтобы человек успевал перевести взгляд с одного пункта на следующий.
+function pulseTabsSequentially() {
+  const tabs = Array.from(document.querySelectorAll('#tabs .tab'));
+  const stepMs = 2600; // 2.5-3 секунды на каждый пункт
+  tabs.forEach((tab, i) => {
+    setTimeout(() => {
+      tab.style.animationDuration = stepMs + 'ms';
+      tab.classList.add('help-wave');
+      setTimeout(() => {
+        tab.classList.remove('help-wave');
+        tab.style.animationDuration = '';
+      }, stepMs);
+    }, i * stepMs);
+  });
+}
 
 document.addEventListener('click', (e) => {
   // игнорируем клики по интерактивным элементам — нас интересуют клики "в никуда"
@@ -1845,7 +1937,7 @@ function setLang(newLang) {
   renderLegendsList();
   renderRouteList();
   renderInfo();
-  if (document.getElementById('helpBubble').classList.contains('show')) renderHelpBubbleText();
+  if (document.getElementById('helpBubble').classList.contains('show')) renderHelpBubbleText(document.getElementById('helpBubble').dataset.mode);
 }
 
 document.querySelectorAll('.pill-btn[data-lang]').forEach(btn => {
@@ -2095,6 +2187,21 @@ function updateGpsDistancePanel(lat, lng) {
     }
   } else {
     castleRow.classList.remove('show');
+  }
+
+  // --- Общая ориентация на маршруте: всегда видно, пока GPS активен и
+  // близкая панель выше не показана (чтобы не дублировать одно и то же) ---
+  const routeRow = document.getElementById('gpsRouteRow');
+  if (routeRow) {
+    const nearestIdx = findNearestCastleIndex(lat, lng);
+    if (nearestIdx >= 0 && !castleRow.classList.contains('show')) {
+      const nc = castles[nearestIdx];
+      const nd = distanceMeters(lat, lng, nc.lat, nc.lng);
+      document.getElementById('gpsRouteText').textContent = t.gpsRouteNear(nc.name, formatDistance(nd));
+      routeRow.classList.add('show');
+    } else {
+      routeRow.classList.remove('show');
+    }
   }
 
   // --- Сохранённая точка (корабль/автобус/машина) ---
