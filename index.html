@@ -1144,6 +1144,7 @@ let castlePhotos = [];
 let gpsActive = false;
 let gpsWatchId = null;
 let gpsMarker = null;
+let gpsLastLat = null, gpsLastLng = null;
 
 function renderTabs() {
   const tabsEl = document.getElementById('tabs');
@@ -1503,6 +1504,7 @@ function initMap() {
     marker.on('click', () => {
       selectedIndex = i;
       showMapPanel(i);
+      if (gpsActive && gpsLastLat !== null) updateGpsDistancePanel(gpsLastLat, gpsLastLng);
     });
     marker.bindTooltip(c.name);
   });
@@ -1515,6 +1517,7 @@ function initMap() {
   document.getElementById('mapPanelClose').onclick = () => {
     document.getElementById('mapPanel').classList.remove('open');
     selectedIndex = -1;
+    if (gpsActive && gpsLastLat !== null) updateGpsDistancePanel(gpsLastLat, gpsLastLng);
   };
 
   document.getElementById('mapPanelOpenGuide').onclick = () => {
@@ -1775,17 +1778,22 @@ function distanceMeters(lat1, lng1, lat2, lng2) {
 
 // Панель с расстоянием видна только на подходе к замку (как в исходной версии) —
 // дальше этого порога она просто скрыта, а не показывает бессмысленные десятки км.
-const GPS_DISTANCE_VISIBLE_M = 3000;
+const GPS_DISTANCE_VISIBLE_M = 2000;
 const GPS_ARRIVED_M = 60;
 
 function updateGpsDistancePanel(lat, lng) {
   const panel = document.getElementById('gpsDistancePanel');
   if (!panel) return;
-  const nearest = findNearestCastleIndex(lat, lng);
-  if (nearest < 0) { panel.classList.remove('show'); return; }
-  const c = castles[nearest];
+
+  // Если открыта карточка конкретного замка на карте — считаем расстояние до него
+  // (без ограничения в 2 км, человек сам выбрал цель и хочет знать, сколько до неё).
+  // Иначе — до ближайшего замка, и только если он рядом (иначе цифра бесполезна).
+  const useSelected = selectedIndex >= 0 && typeof castles[selectedIndex]?.lat === 'number';
+  const targetIndex = useSelected ? selectedIndex : findNearestCastleIndex(lat, lng);
+  if (targetIndex < 0) { panel.classList.remove('show'); return; }
+  const c = castles[targetIndex];
   const d = distanceMeters(lat, lng, c.lat, c.lng);
-  if (d > GPS_DISTANCE_VISIBLE_M) { panel.classList.remove('show'); return; }
+  if (!useSelected && d > GPS_DISTANCE_VISIBLE_M) { panel.classList.remove('show'); return; }
 
   const t = UI[lang];
   const valueEl = document.getElementById('gpsDistanceValue');
@@ -1840,6 +1848,7 @@ function startGps() {
       }
       if (leafletMap) leafletMap.panTo([latitude, longitude]);
 
+      gpsLastLat = latitude; gpsLastLng = longitude;
       updateGpsDistancePanel(latitude, longitude);
 
       const nearest = findNearestCastleIndex(latitude, longitude);
