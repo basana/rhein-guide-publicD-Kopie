@@ -112,17 +112,22 @@
 
   .tab {
     flex-shrink: 0; font-size: calc(12px * var(--scale)); padding: 7px 15px; border-radius: 20px;
-    color: var(--ink-soft); white-space: nowrap; cursor: pointer; border: 1px solid var(--gold);
-    background: var(--parchment);
+    color: var(--tab-color, var(--ink-soft)); white-space: nowrap; cursor: pointer;
+    border: 1.5px solid var(--tab-color, var(--gold));
+    background: var(--parchment); font-weight: 600;
+    transition: background .2s ease, color .2s ease;
   }
-  .tab.active { background: var(--terracotta); color: var(--cream-text); font-weight: 500; border-color: var(--terracotta); }
+  .tab.active {
+    background: var(--tab-color, var(--terracotta)); color: var(--cream-text);
+    font-weight: 700; border-color: var(--tab-color, var(--terracotta));
+  }
 
   .content { flex: 1 1 auto; overflow-y: auto; padding: 14px var(--pad) 20px; max-width: 580px; margin: 0 auto; width: 100%; position: relative; }
   .view { display: none; }
   .view.active { display: block; }
 
   .photo {
-    position: relative; width: 100%; aspect-ratio: 1 / 1;
+    position: relative; width: 100%; aspect-ratio: 4 / 3;
     margin: 4px 0 18px; border-radius: 14px; overflow: hidden;
     background: #E8D9B5; border: 1px solid var(--gold);
     touch-action: pan-y;
@@ -163,6 +168,44 @@
     margin: 0 auto 18px; max-width: 38ch; text-align: right;
     font-size: calc(clamp(15px, 4vw, 16.5px) * var(--scale)); line-height: 1.65;
     font-style: italic; color: var(--ink-soft);
+  }
+
+  /* Указатели к основным разделам — сразу под уменьшенным фото первого экрана */
+  .quick-links { display: flex; gap: 10px; margin-bottom: 18px; font-family: var(--sans); }
+  .quick-link {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
+    background: var(--parchment-deep); border: 1px solid var(--gold); border-radius: 12px;
+    padding: 12px 8px; cursor: pointer; color: var(--ink);
+  }
+  .quick-link-icon { font-size: 22px; line-height: 1; }
+  .quick-link-label { font-size: 12.5px; font-weight: 700; }
+
+  /* Всплывающее меню «Ещё» — список второстепенных разделов одним пунктом */
+  .more-menu-backdrop {
+    position: fixed; inset: 0; z-index: 1390; background: rgba(20,14,6,0.38);
+    display: none; opacity: 0; transition: opacity .3s ease;
+  }
+  .more-menu-backdrop.show { display: block; }
+  .more-menu-backdrop.visible { opacity: 1; }
+  .more-menu {
+    position: fixed; left: 16px; right: 16px; top: 50%; transform: translateY(-50%) scale(0.96);
+    z-index: 1400; background: var(--parchment); border: 1px solid var(--gold); border-radius: 18px;
+    box-shadow: 0 14px 36px rgba(20,14,6,0.45); padding: 18px; font-family: var(--sans);
+    display: none; opacity: 0; transition: opacity .3s ease, transform .3s ease;
+  }
+  .more-menu.show { display: block; }
+  .more-menu.visible { opacity: 1; transform: translateY(-50%) scale(1); }
+  .more-menu-title { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 12px; }
+  .more-menu-item {
+    display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
+    background: var(--parchment-deep); border: 1.5px solid var(--item-color, var(--gold));
+    color: var(--item-color, var(--ink)); border-radius: 12px; padding: 12px 14px;
+    font-family: var(--sans); font-size: 14.5px; font-weight: 700; cursor: pointer; margin-bottom: 8px;
+  }
+  .more-menu-item .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--item-color, var(--gold)); flex: 0 0 auto; }
+  .more-menu-close {
+    position: absolute; top: 14px; right: 14px; width: 26px; height: 26px; border-radius: 50%; border: none;
+    background: rgba(90,67,39,0.12); color: var(--ink-soft); font-size: 13px; cursor: pointer;
   }
 
   .stats { display: flex; gap: 12px; margin-bottom: 18px; font-family: var(--sans); }
@@ -574,6 +617,16 @@
   </div>
 </div>
 
+<!-- МЕНЮ «ЕЩЁ»: второстепенные разделы одним пунктом -->
+<div class="more-menu-backdrop" id="moreMenuBackdrop"></div>
+<div class="more-menu" id="moreMenu">
+  <button class="more-menu-close" id="moreMenuClose">✕</button>
+  <div class="more-menu-title" id="moreMenuTitle">More</div>
+  <button class="more-menu-item" id="moreMenuLegends" data-view="legends" style="--item-color:#7B4B8A"><span class="dot"></span><span id="moreMenuLegendsLabel"></span></button>
+  <button class="more-menu-item" id="moreMenuInfo" data-view="info" style="--item-color:#4A6B4E"><span class="dot"></span><span id="moreMenuInfoLabel"></span></button>
+  <button class="more-menu-item" id="moreMenuRoute" data-view="route" style="--item-color:#A83232"><span class="dot"></span><span id="moreMenuRouteLabel"></span></button>
+</div>
+
 <!-- ПОМОЩНИК-ПОДСКАЗКА: появляется при признаках "потерянности" (частые метания между вкладками) -->
 <div class="help-bubble-backdrop" id="helpBubbleBackdrop"></div>
 <div class="help-bubble" id="helpBubble">
@@ -619,7 +672,20 @@
       </div>
 
       <h1 class="station-title" id="stationTitle"></h1>
-      <p class="desc" id="stationDesc"></p>
+      <p class="desc" id="stationDesc" style="display:none;"></p>
+
+      <!-- УКАЗАТЕЛИ К ОСНОВНЫМ РАЗДЕЛАМ — видны сразу под фото первого экрана,
+           не нужно листать/угадывать, что есть в приложении -->
+      <div class="quick-links" id="quickLinks">
+        <button class="quick-link" id="quickLinkMap">
+          <span class="quick-link-icon">🗺️</span>
+          <span class="quick-link-label" id="quickLinkMapLabel">Map</span>
+        </button>
+        <button class="quick-link" id="quickLinkMore">
+          <span class="quick-link-icon">✦</span>
+          <span class="quick-link-label" id="quickLinkMoreLabel">More</span>
+        </button>
+      </div>
 
       <div class="stats">
         <div class="stat"><p id="statTownLabel"></p><p id="statTown"></p></div>
@@ -1258,7 +1324,8 @@ const UI = {
     helpBubbleText: "Can't find what you're looking for? Let me show you the menu.",
     helpBubbleShow: 'Show the menu', helpBubbleDismiss: 'No, thanks',
     helpBubbleTextGps: 'Live GPS distance to the nearest castle is part of the bonus edition.',
-    helpBubbleShowGps: 'Learn more'
+    helpBubbleShowGps: 'Learn more',
+    quickLinkMore: 'More', moreMenuTitle: 'More'
   },
   ru: {
     tabs: ['Гид', 'Точки', 'Карта', 'Легенды', 'Инфо', 'Маршрут'],
@@ -1298,7 +1365,8 @@ const UI = {
     helpBubbleText: 'Не находите нужный раздел? Покажу, что есть в меню.',
     helpBubbleShow: 'Показать меню', helpBubbleDismiss: 'Нет, спасибо',
     helpBubbleTextGps: 'GPS и расстояние до ближайшего замка доступны в бонусной версии.',
-    helpBubbleShowGps: 'Узнать больше'
+    helpBubbleShowGps: 'Узнать больше',
+    quickLinkMore: 'Ещё', moreMenuTitle: 'Ещё'
   }
 };
 
@@ -1323,15 +1391,28 @@ let gpsMarker = null;
 let gpsLastLat = null, gpsLastLng = null;
 let savedSpotMarker = null;
 
+// Свой цвет на каждый раздел — как цветные клапаны у профессиональной папки.
+// Помогает узнавать раздел по цвету, не читая подпись каждый раз.
+const TAB_COLORS = {
+  guide: '#B5602E',   // терракотовый — основной цвет приложения
+  castles: '#C08A2E', // тёплая охра
+  map: '#3a6ea5',     // синий — та же логика, что у GPS/карты в остальном приложении
+  legends: '#7B4B8A', // приглушённый лиловый — легенды/предания
+  info: '#4A6B4E',    // зелёный (--done)
+  route: '#A83232'    // кирпично-красный
+};
+
 function renderTabs() {
   const tabsEl = document.getElementById('tabs');
   tabsEl.innerHTML = '';
   UI[lang].tabs.forEach((label, i) => {
     const s = document.createElement('span');
     const tabKeys = ['guide', 'castles', 'map', 'legends', 'info', 'route'];
-    s.className = 'tab' + (tabKeys[i] === currentView ? ' active' : '');
+    const key = tabKeys[i];
+    s.className = 'tab' + (key === currentView ? ' active' : '');
+    s.style.setProperty('--tab-color', TAB_COLORS[key] || 'var(--terracotta)');
     s.textContent = label;
-    s.onclick = () => switchView(tabKeys[i]);
+    s.onclick = () => switchView(key);
     tabsEl.appendChild(s);
   });
 }
@@ -1514,6 +1595,64 @@ document.addEventListener('click', (e) => {
   trackClickForConfusion(e.clientX, e.clientY);
 }, true);
 
+/* ============================================================
+   УКАЗАТЕЛИ К РАЗДЕЛАМ на первом экране (под уменьшенным фото)
+   + меню «Ещё» со второстепенными разделами одним списком.
+   ============================================================ */
+function renderQuickLinksText() {
+  const t = UI[lang];
+  const mapLbl = document.getElementById('quickLinkMapLabel');
+  const moreLbl = document.getElementById('quickLinkMoreLabel');
+  if (mapLbl) mapLbl.textContent = t.tabs[2]; // «Карта» / «Map»
+  if (moreLbl) moreLbl.textContent = t.quickLinkMore;
+
+  const title = document.getElementById('moreMenuTitle');
+  if (title) title.textContent = t.moreMenuTitle;
+  const lg = document.getElementById('moreMenuLegendsLabel');
+  const inf = document.getElementById('moreMenuInfoLabel');
+  const rt = document.getElementById('moreMenuRouteLabel');
+  if (lg) lg.textContent = t.tabs[3];
+  if (inf) inf.textContent = t.tabs[4];
+  if (rt) rt.textContent = t.tabs[5];
+}
+
+function openMoreMenu() {
+  renderQuickLinksText();
+  const el = document.getElementById('moreMenu');
+  const backdrop = document.getElementById('moreMenuBackdrop');
+  el.classList.add('show');
+  backdrop.classList.add('show');
+  requestAnimationFrame(() => {
+    el.classList.add('visible');
+    backdrop.classList.add('visible');
+  });
+}
+function closeMoreMenu() {
+  const el = document.getElementById('moreMenu');
+  const backdrop = document.getElementById('moreMenuBackdrop');
+  el.classList.remove('visible');
+  backdrop.classList.remove('visible');
+  setTimeout(() => {
+    el.classList.remove('show');
+    backdrop.classList.remove('show');
+  }, 300);
+}
+
+const quickLinkMapBtn = document.getElementById('quickLinkMap');
+if (quickLinkMapBtn) quickLinkMapBtn.addEventListener('click', () => switchView('map'));
+const quickLinkMoreBtn = document.getElementById('quickLinkMore');
+if (quickLinkMoreBtn) quickLinkMoreBtn.addEventListener('click', openMoreMenu);
+const moreMenuCloseBtn = document.getElementById('moreMenuClose');
+if (moreMenuCloseBtn) moreMenuCloseBtn.addEventListener('click', closeMoreMenu);
+const moreMenuBackdropEl = document.getElementById('moreMenuBackdrop');
+if (moreMenuBackdropEl) moreMenuBackdropEl.addEventListener('click', closeMoreMenu);
+document.querySelectorAll('.more-menu-item').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    closeMoreMenu();
+    switchView(btn.dataset.view);
+  });
+});
+
 // Делит текст на два примерно равных по длине куска (по границе слова),
 // для «расходящейся» двухколоночной вёрстки (обе половины тянутся к разделителю).
 function splitBalanced(text) {
@@ -1549,7 +1688,8 @@ function renderGuide() {
   document.getElementById('badge').textContent = t.stationLabel(index + 1, castles.length);
   document.getElementById('stationTitle').textContent = s.name;
   document.getElementById('stationDesc').textContent = lang === 'ru' ? (s.sayRu || s.factsRu) : (s.say || s.facts);
-  
+  renderQuickLinksText();
+
   document.getElementById('statTownLabel').textContent = t.town;
   document.getElementById('statTown').textContent = s.town;
   document.getElementById('statBuiltLabel').textContent = t.built;
